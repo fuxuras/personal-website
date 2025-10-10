@@ -1,0 +1,15 @@
+---
+const {href, target ,text, isActive = false} = Astro.props;
+---
+
+<a 
+    href={href} 
+    target={target}
+    class:list={[
+        "block p-2 rounded-lg transition-colors",
+        {
+            "bg-neutral-950 text-white": isActive,
+            "hover:bg-neutral-200": !isActive
+        }
+    ]}
+>{text}</a>
