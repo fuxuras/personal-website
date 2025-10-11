@@ -1,7 +1,63 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const milestones = [
+    {
+        time: "2025-06",
+        title: "Graduated from University",
+        description: "Yay! Welcome to world of unemployment",
+    },
+    {
+        time: "2025-02",
+        title: "Started 5 month internship at Kentkart",
+        description: "Met with wonderful people in here. Thanks for everyone",
+    },
+    {
+        time: "2024-08",
+        title: "Started 1 month internship at Enoca",
+        description: "Just an ordinary boring internship",
+    },
+    {
+        time: "2024-07",
+        title: "Started 1 month internship at PI Works",
+        description: "Amazing people but they writing .Net",
+    },
+    {
+        time: "2023-11",
+        title: "HomeServer Adventure",
+        description: "I must see this was coming",
+    },
+    {
+        time: "2023-09",
+        title: "Met with ArchLinux",
+        description: "Canonical event i guess.",
+    },
+];
 ---
 
 <Layout title="Biography">
-    <h1>Biography</h1>
+    <h1 class="text-4xl font-bold mb-8">Biography</h1>
+
+    {
+        milestones.map((milestone) => (
+            <div class="flex">
+                <div class=" mt-2 grid size-5 place-items-center rounded-full border border-neutral-200 shadow-lg">
+                    <div class="rounded-full bg-blue-400 size-2" />
+                </div>
+                
+
+                <div class="pb-10 pl-8">
+                    <h3 class="text-xl font-semibold text-gray-900 ">
+                        {milestone.title}
+                    </h3>
+                    <time class="block mb-2 text-sm font-normal leading-none text-gray-400">
+                        {milestone.time}
+                    </time>
+                    <p class="text-base font-normal text-gray-600">
+                        {milestone.description}
+                    </p>
+                </div>
+            </div>
+        ))
+    }
 </Layout>
