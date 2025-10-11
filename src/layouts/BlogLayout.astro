@@ -21,7 +21,7 @@ const { title } = Astro.props;
                         const postUrl = `/blog/${post.slug}`;
                         const isActive = path === postUrl;
                         return (
-                            <BlogLink href={postUrl} text={post.data.title} description={post.data.description} date={post.data.pubDate} isActive={isActive}>
+                            <BlogLink href={postUrl} text={post.data.title} date={post.data.pubDate} isActive={isActive}>
                                 
                             </BlogLink>
                         )
