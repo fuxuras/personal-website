@@ -13,7 +13,7 @@ const { title } = Astro.props;
 
 <Layout {title}>
     <div class="grid grid-cols-1 md:grid-cols-[384px_1fr] h-full ">
-        <aside class="bg-neutral-50 rounded-lg border-neutral-200 border-r">
+        <aside class="overflow-y-auto bg-neutral-50 rounded-lg border-neutral-200 border-r">
             <h2 class="text-lg font-bold p-3 border-b-1 border-neutral-200 ">All Posts</h2>
             <nav>
                 <div class="flex flex-col p-2">
@@ -30,7 +30,7 @@ const { title } = Astro.props;
             </nav>
         </aside>
 
-        <div class="prose max-w-none">
+        <div class="overflow-y-auto prose max-w-none">
             <slot/>
         </div>
     </div>
