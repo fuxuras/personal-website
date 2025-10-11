@@ -1,15 +1,19 @@
 ---
-const {href, target ,text, isActive = false} = Astro.props;
+import { Icon } from 'astro-icon/components'
+const {href, target ,text, isActive = false, iconName} = Astro.props;
 ---
 
 <a 
     href={href} 
     target={target}
     class:list={[
-        "block p-2 rounded-lg transition-colors",
+        "p-2 rounded-lg transition-colors flex gap-2",
         {
             "bg-neutral-950 text-white": isActive,
             "hover:bg-neutral-200": !isActive
         }
     ]}
->{text}</a>
+>
+    {iconName && <Icon name={iconName} class="size-5 shrink-0" />}
+    <span>{text}</span>
+</a>

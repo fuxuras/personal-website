@@ -22,10 +22,10 @@ const currentPath = Astro.url.pathname;
 				<h1 class="text-4xl font-bold mb-8 mt-4 ml-2"><a href="/">Fuxuras</a></h1>
 				
 				<div class="flex flex-col gap-1">
-					<Button href="/" text="Homepage" isActive={currentPath === '/'} />
-					<Button href="/biography" text="Biography" isActive={currentPath === '/biography'} />
-					<Button href="/blog" text="Blog" isActive={currentPath.startsWith('/blog')} />
-					<Button href="/projects" text="Projects" isActive={currentPath === '/projects'} />
+					<Button href="/" text="Homepage" isActive={currentPath === '/'} iconName="heroicons:home"/>
+					<Button href="/biography" text="Biography" isActive={currentPath === '/biography'} iconName="heroicons:user" />
+					<Button href="/blog" text="Blog" isActive={currentPath.startsWith('/blog')} iconName="heroicons:pencil-square" />
+					<Button href="/projects" text="Projects" isActive={currentPath === '/projects'} iconName="heroicons:code-bracket" />
 				</div>
 
 				<div class="mt-5 border-t border-neutral-200 pt-4">
