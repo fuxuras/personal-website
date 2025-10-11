@@ -17,7 +17,7 @@ const { Content } = await post.render();
 ---
 
 <BlogLayout title={post.data.title}>
-  <article class="p-10">
+  <article class="p-10 max-w-3/4 mx-auto">
     <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
     <p class="text-lg text-neutral-500 mb-8">
         {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
