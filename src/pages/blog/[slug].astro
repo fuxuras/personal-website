@@ -1,5 +1,5 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -16,14 +16,14 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<Layout title={post.data.title}>
-  <article>
+<BlogLayout title={post.data.title}>
+  <article class="p-4">
     <h1 class="text-4xl font-bold mb-2">{post.data.title}</h1>
-    <p class="text-lg text-neutral-500 mb-8">Yayınlanma Tarihi: {post.data.pubDate.toLocaleDateString('tr-TR')}</p>
+    <p class="text-lg text-neutral-500 mb-8">
+        {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
     
-    <div class="prose prose-invert max-w-none">
-        <Content />
-    </div>
+    <Content />
 
   </article>
-</Layout>
+</BlogLayout>

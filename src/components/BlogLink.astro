@@ -1,0 +1,19 @@
+---
+const {href, description, date, text, isActive = false,} = Astro.props;
+---
+
+<a 
+    href={href}
+    class:list={[
+        "p-2 rounded-lg transition-colors flex gap-2",
+        {
+            "bg-neutral-950 text-white": isActive,
+            "hover:bg-neutral-200": !isActive
+        }
+    ]}
+>
+    <div class="flex flex-col">
+        <div>{text} - <small>{date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</small></div>
+        <small>{description}</small>
+    </div>
+</a>

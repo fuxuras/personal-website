@@ -1,20 +1,6 @@
 ---
-import Layout from "../../layouts/Layout.astro"
-import { getCollection } from "astro:content";
-
-const posts = await getCollection('blog');
-posts.sort((a,b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+import BlogLayout from '../../layouts/BlogLayout.astro';
 ---
-<Layout title="Blog">
-    <h1>Blog</h1>
-    <ul>    
-        {posts.map(post => (
-            <li>
-                <a href={`/blog/${post.slug}/`}>
-                    <h2>{post.data.title}</h2>
-                    <p>{post.data.pubDate.toDateString()}</p>
-                </a>
-            </li>
-        ))}
-    </ul>
-</Layout>
+<BlogLayout title="Blog">
+
+</BlogLayout>

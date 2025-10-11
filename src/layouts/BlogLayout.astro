@@ -1,0 +1,37 @@
+--- 
+import BlogLink from "../components/BlogLink.astro";
+import Layout from "./Layout.astro";
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const path = Astro.url.pathname;
+const { title } = Astro.props;
+---
+
+
+<Layout {title}>
+    <div class="grid grid-cols-1 md:grid-cols-[384px_1fr] gap-8 h-full ">
+        <aside class="bg-neutral-50 rounded-lg border-neutral-200 border-r">
+            <h2 class="text-lg font-bold p-3 border-b-1 border-neutral-200 ">All Posts</h2>
+            <nav>
+                <div class="flex flex-col p-2">
+                    {posts.map(post => {
+                        const postUrl = `/blog/${post.slug}`;
+                        const isActive = path === postUrl;
+                        return (
+                            <BlogLink href={postUrl} text={post.data.title} description={post.data.description} date={post.data.pubDate} isActive={isActive}>
+                                
+                            </BlogLink>
+                        )
+                    })}
+                </div>
+            </nav>
+        </aside>
+
+        <div class="prose max-w-none">
+            <slot/>
+        </div>
+    </div>
+</Layout>
