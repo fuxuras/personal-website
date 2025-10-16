@@ -2,9 +2,6 @@
 title: 'Which loop is faster in Java? A classic for loop, an enhanced for-each, or a modern Stream?'
 pubDate: 2025-09-18
 tags: ['software']
-import jmh100 from '../../assets/jmh-benchmark-100.png';
-import jmh10k from '../../assets/jmh-benchmark-10k.png';
-import jmh1M from '../../assets/jmh-benchmark-1M.png';
 ---
 
 ## Which loop is faster in Java? A classic for loop, an enhanced for-each, or a modern Stream?
@@ -24,11 +21,11 @@ My new benchmark properly warms up the JVM and uses a special Blackhole object t
 
 The new results were completely different from my first test, and they painted a much clearer picture.
 
-<img src={jmh100.src} alt='JMH benchmark results for 100 elements, showing classic for loop is fastest.' />
+![JMH benchmark results for 100 elements, showing classic for loop is fastest.](../../assets/jmh-benchmark-100.png)
 
-<img src={jmh10k.src} alt='JMH benchmark results for 10,000 elements, highlighting the significant performance lead of the classic for loop.' />
+![JMH benchmark results for 10,000 elements, highlighting the significant performance lead of the classic for loop.](../../assets/jmh-benchmark-10k.png)
 
-<img src={jmh1M.src} alt='JMH benchmark results for 1,000,000 elements, demonstrating the classic for loop\'s superior performance at scale.' />
+![JMH benchmark results for 1,000,000 elements, demonstrating the classic for loop\'s superior performance at scale.](../../assets/jmh-benchmark-1M.png)
 
 As the JMH results clearly show, the classic for loop is significantly faster than the others for simple iteration over an ArrayList. The performance difference is real and becomes larger as the list size grows.
 
