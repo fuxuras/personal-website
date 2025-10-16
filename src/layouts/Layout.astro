@@ -26,6 +26,7 @@ const currentPath = Astro.url.pathname;
 					<Button href="/biography" text="Biography" isActive={currentPath === '/biography'} iconName="heroicons:user" />
 					<Button href="/blog" text="Blog" isActive={currentPath.startsWith('/blog')} iconName="heroicons:pencil-square" />
 					<Button href="/projects" text="Projects" isActive={currentPath === '/projects'} iconName="heroicons:code-bracket" />
+					<Button href="/commonplace" text="Commonplace" isActive={currentPath.startsWith('/commonplace')} iconName="heroicons:bookmark" />
 				</div>
 
 				<div class="mt-5 border-t border-neutral-200 pt-4">
