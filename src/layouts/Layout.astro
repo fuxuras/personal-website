@@ -1,45 +1,104 @@
---- 
-const {title} = Astro.props;
-import '../styles/global.css'
-import Button from '../components/Button.astro';
+---
+import { Icon } from "astro-icon/components";
+
+const { title } = Astro.props;
+import "../styles/global.css";
+import Button from "../components/Button.astro";
 
 const currentPath = Astro.url.pathname;
 ---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-	</head>
-	<body>
-		<div class="flex h-screen">
-			<nav class="overflow-y-auto w-64 shrink-0 border-neutral-200 border-r flex flex-col p-2 bg-neutral-50">
-				<h1 class="text-4xl font-bold mb-8 mt-4 ml-2"><a href="/">Fuxuras</a></h1>
-				
-				<div class="flex flex-col gap-1">
-					<Button href="/" text="Homepage" isActive={currentPath === '/'} iconName="heroicons:home"/>
-					<Button href="/biography" text="Biography" isActive={currentPath.startsWith('/biography')} iconName="heroicons:user" />
-					<Button href="/blog" text="Blog" isActive={currentPath.startsWith('/blog')} iconName="heroicons:pencil-square" />
-					<Button href="/projects" text="Projects" isActive={currentPath.startsWith('/projects')} iconName="heroicons:code-bracket" />
-					<Button href="/commonplace" text="Commonplace" isActive={currentPath.startsWith('/commonplace')} iconName="heroicons:bookmark" />
-				</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="flex h-screen">
+      <button id="menu-toggle" class="md:hidden absolute top-4 right-4 z-20">
+        <Icon name="heroicons:bars-3" class="w-8 h-8" />
+      </button>
+      <nav
+        id="sidebar"
+        class="overflow-y-auto shrink-0 flex-col p-2 bg-neutral-50 hidden fixed inset-0 z-10 md:relative md:flex md:w-64 md:border-r md:border-neutral-200"
+      >
+        
+      
+        <h1 class="text-4xl font-bold mb-8 mt-4 ml-2"><a href="/">Fuxuras</a></h1>
 
-				<div class="mt-5 border-t border-neutral-200 pt-4">
-					<div class="flex flex-col gap-1">
-						<Button href="https://github.com/fuxuras" target="_blank" text="GitHub" iconName="simple-icons:github" />
-						<Button href="https://www.linkedin.com/in/furkancan-okal" target="_blank" text="LinkedIn" iconName="simple-icons:linkedin"/>
-					</div>
-				</div>
-			</nav>
-			<main class="overflow-y-auto flex-1">
-				<slot />
-			</main>
-		</div>
-	</body>
+        <div class="flex flex-col gap-1">
+          <Button
+            href="/"
+            text="Homepage"
+            isActive={currentPath === "/"}
+            iconName="heroicons:home"
+          />
+          <Button
+            href="/biography"
+            text="Biography"
+            isActive={currentPath.startsWith("/biography")}
+            iconName="heroicons:user"
+          />
+          <Button
+            href="/blog"
+            text="Blog"
+            isActive={currentPath.startsWith("/blog")}
+            iconName="heroicons:pencil-square"
+          />
+          <Button
+            href="/projects"
+            text="Projects"
+            isActive={currentPath.startsWith("/projects")}
+            iconName="heroicons:code-bracket"
+          />
+          <Button
+            href="/commonplace"
+            text="Commonplace"
+            isActive={currentPath.startsWith("/commonplace")}
+            iconName="heroicons:bookmark"
+          />
+        </div>
+
+        <div class="mt-5 border-t border-neutral-200 pt-4">
+          <div class="flex flex-col gap-1">
+            <Button
+              href="https://github.com/fuxuras"
+              target="_blank"
+              text="GitHub"
+              iconName="simple-icons:github"
+            />
+            <Button
+              href="https://www.linkedin.com/in/furkancan-okal"
+              target="_blank"
+              text="LinkedIn"
+              iconName="simple-icons:linkedin"
+            />
+          </div>
+        </div>
+      </nav>
+      <main class="overflow-y-auto flex-1">
+        <slot />
+      </main>
+    </div>
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const sidebar = document.getElementById("sidebar");
+
+      if (menuToggle && sidebar) {
+        menuToggle.addEventListener("click", () => {
+          sidebar.classList.toggle("hidden");
+        });
+      }
+    </script>
+  </body>
 </html>
