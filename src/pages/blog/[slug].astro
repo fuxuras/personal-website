@@ -5,6 +5,7 @@ import FormattedDate from '../../components/FormattedDate.astro';
 import { readingTime } from '../../lib/utils';
 import BackToPrev from '../../components/BackToPrev.astro';
 import Container from '../../components/Container.astro';
+import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
@@ -23,10 +24,11 @@ const { Content } = await post.render();
 ---
 
 <BlogLayout title={post.data.title}>
-  <div class="animate">
+  <div class="flex justify-between items-center animate">
     <BackToPrev href="/blog">
       Back to blog
     </BackToPrev>
+    <LanguageSwitcher lang={post.data.lang} translationSlug={post.data.translation} />
   </div>
   <div class="space-y-1 my-10 animate">
     <div class="animate flex items-center gap-1.5">

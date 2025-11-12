@@ -3,6 +3,7 @@ title: 'Which loop is faster in Java? A classic for loop, an enhanced for-each, 
 description: "As a recent computer engineering graduate, I often use different types of loops in my personal projects - the classic for, the enhanced for-each, and stream().forEach(). I used them interchangeably without thinking much about their performance. So, I got curious: which one is actually faster?"
 date: 2025-09-18
 tags: ['software']
+lang: 'en'
 ---
 
 

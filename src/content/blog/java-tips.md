@@ -3,6 +3,8 @@ title: '5 Java Interview Tips and Tricks'
 description: "I keep seeing these in interviews and take-home assessments. Here are 5 examples with code and output."
 date: 2025-11-12
 tags: ['java', 'programming', 'interview']
+lang: 'en'
+translation: ''
 ---
 
 
