@@ -1,0 +1,28 @@
+---
+import { Icon } from "astro-icon/components";
+import { NAV_LINKS } from "../consts.js";
+import Container from "./Container.astro";
+import Link from "./Link.astro";
+---
+
+<header>
+  <Container>
+    <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+      <a href="/" class="text-xl font-bold hover:text-primary transition-colors">
+        Fuxuras
+      </a>
+      <div class="flex items-center gap-x-6">
+        <nav class="flex flex-wrap items-center gap-x-1 gap-y-2 text-sm sm:text-base text-muted-foreground">
+          {
+            NAV_LINKS.map((link, index) => (
+              <>
+                <Link href={link.href}>{link.text}</Link>
+                {index < NAV_LINKS.length - 1 && <span>/</span>}
+              </>
+            ))
+          }
+        </nav>
+      </div>
+    </div>
+  </Container>
+</header>

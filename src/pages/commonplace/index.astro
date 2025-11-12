@@ -1,52 +1,25 @@
---- 
+---
 import Layout from '../../layouts/Layout.astro';
 import QuoteCard from '../../components/QuoteCard.astro';
+import { getCollection } from "astro:content";
+import Container from '../../components/Container.astro';
 
-const quotes = [
-    {
-        text: "If a stone which has been projected through the air had consciousness, it would believe that it was moving of its own free will.",
-        author: "Baruch Spinoza"
-    },
-    {
-        text: "Perfectionism is the cleverest guise of fear, not of high standards.",
-        author: "Unknown"
-    },
-    {
-        text: "Life swings like a pendulum backward and forward between pain and boredom.",
-        author: "Arthur Schopenhauer"
-    },
-    {
-        text: "The best time to plant a tree was 20 years ago. The second best time is now.",
-        author: "Chinese Proverb"
-    },
-    {
-        text: "The ultimate project of a person is oneself.",
-        author: ""
-    },
-    {
-        text: "The world will ask you who you are, and if you don't know, the world will tell you.",
-        author: "Carl Jung"
-    },
-    {
-        text: "But if we stop and go no farther, why go so far?",
-        author: "David Hume"
-    },
-    {
-        text: "Akıllı köprüyü arayana kadar deli suyu geçer.",
-        subtext: "While the wise man looks for the bridge, the fool crosses the river.",
-        author: "Turkish Proverb"
-    }
-];
+const quotes = (await getCollection('commonplace'))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()); // Sort by pubDate
 ---
 
 <Layout title="Commonplace">
-    <div class="p-10">
-        <h1 class="text-2xl">Commonplace</h1>
-        <p class="text-lg text-neutral-600 mb-10 max-w-3xl">A collection of quotes, passages, and ideas from books, people, and my own thoughts.</p>
-        <div class="grid grid-cols-1 gap-8 mt-5 w-full md:w-3/4 mx-auto">
-            {quotes.map(quote => (
-                <QuoteCard quote={quote} />
-            ))}
+    <Container>
+        <div class="space-y-10">
+            <div class="font-semibold text-black dark:text-white text-xl animate">
+                Commonplace
+            </div>
+            <p class="text-lg text-muted-foreground max-w-3xl animate">A collection of quotes, passages, and ideas from books, people, and my own thoughts.</p>
+            <div class="grid grid-cols-1 gap-8 animate">
+                {quotes.map(quote => (
+                    <QuoteCard quote={quote} />
+                ))}
+            </div>
         </div>
-    </div>
+    </Container>
 </Layout>

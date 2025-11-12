@@ -1,13 +1,32 @@
----
+--- 
 import Layout from "../layouts/Layout.astro";
+import { SOCIAL_LINKS } from "../consts.js";
+import { Icon } from "astro-icon/components";
+import Container from "../components/Container.astro";
 ---
 
 <Layout title="Homepage">
-    <div class="p-10">
-        <h1 class="text-2xl font-bold">Furkancan Okal</h1>
-        <p class="mt-4 text-xl text-neutral-500">
-            Average Java Spring Boot and Go enjoyer
-        </p>
-        <p class="mt-4 text-xl text-neutral-500">Lifelong Learner</p>
-    </div>
+    <Container>
+        <div class="space-y-12">
+            <div class="animate">
+                <h1 class="text-xl font-bold">Furkancan Okal</h1>
+                <p class="mt-4 text-lg text-muted-foreground">
+                    Average Java Spring Boot and Go enjoyer
+                </p>
+                <p class="mt-2 text-lg text-muted-foreground">Lifelong Learner</p>
+            </div>
+
+            <section class="space-y-4 animate">
+                <h2 class="text-xl font-bold">Let's Connect</h2>
+                <div class="flex flex-wrap gap-x-6 gap-y-4 pt-2">
+                    {SOCIAL_LINKS.map(link => (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 p-2 -m-2 rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
+                            <Icon name={link.icon} class="w-6 h-6" />
+                            <span class="text-base font-medium">{link.name}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        </div>
+    </Container>
 </Layout>

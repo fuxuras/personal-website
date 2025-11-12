@@ -1,11 +1,9 @@
 ---
-import { Icon } from "astro-icon/components";
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 const { title } = Astro.props;
 import "../styles/global.css";
-import Button from "../components/Button.astro";
-
-const currentPath = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -16,98 +14,43 @@ const currentPath = Astro.url.pathname;
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
-            rel="stylesheet"
-        />
+        <script is:inline>
+            const theme = (() => {
+                if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+                    return localStorage.getItem('theme');
+                }
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    return 'dark';
+                }
+                return 'light';
+            })();
+
+            if (theme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+        </script>
     </head>
-    <body>
-        <div class="flex h-screen">
-            <button
-                id="menu-toggle"
-                class="md:hidden absolute top-4 right-4 z-20"
-            >
-                <Icon name="heroicons:bars-3" class="w-8 h-8" />
-            </button>
-            <nav
-                id="sidebar"
-                class="overflow-y-auto shrink-0 flex-col p-2 bg-neutral-50 hidden fixed inset-0 z-10 md:relative md:flex md:w-64 md:border-r md:border-neutral-200"
-            >
-                <h1 class="text-4xl font-bold mb-8 mt-4 ml-2">
-                    <a href="/">Fuxuras</a>
-                </h1>
-
-                <div class="flex flex-col gap-1">
-                    <Button
-                        href="/"
-                        text="Homepage"
-                        isActive={currentPath === "/"}
-                        iconName="heroicons:home"
-                    />
-                    <Button
-                        href="/biography"
-                        text="Biography"
-                        isActive={currentPath.startsWith("/biography")}
-                        iconName="heroicons:user"
-                    />
-                    <Button
-                        href="/blog"
-                        text="Blog"
-                        isActive={currentPath.startsWith("/blog")}
-                        iconName="heroicons:pencil-square"
-                    />
-                    <Button
-                        href="/projects"
-                        text="Projects"
-                        isActive={currentPath.startsWith("/projects")}
-                        iconName="heroicons:code-bracket"
-                    />
-                    <Button
-                        href="/commonplace"
-                        text="Commonplace"
-                        isActive={currentPath.startsWith("/commonplace")}
-                        iconName="heroicons:bookmark"
-                    />
-                </div>
-
-                <div class="mt-5 border-t border-neutral-200 pt-4">
-                    <div class="flex flex-col gap-1">
-                        <Button
-                            href="https://x.com/fuxuras"
-                            target="_blank"
-                            text="X"
-                            iconName="simple-icons:x"
-                        />
-                        <Button
-                            href="https://github.com/fuxuras"
-                            target="_blank"
-                            text="GitHub"
-                            iconName="simple-icons:github"
-                        />
-                        <Button
-                            href="https://www.linkedin.com/in/furkancan-okal"
-                            target="_blank"
-                            text="LinkedIn"
-                            iconName="simple-icons:linkedin"
-                        />
-                    </div>
-                </div>
-            </nav>
-            <main class="overflow-y-auto flex-1">
-                <slot />
-            </main>
-        </div>
+    <body class="">
+        <Header />
+        <main class="max-w-4xl mx-auto px-4">
+            <slot />
+        </main>
+        <Footer />
         <script>
-            const menuToggle = document.getElementById("menu-toggle");
-            const sidebar = document.getElementById("sidebar");
+            function animate() {
+                const animateElements = document.querySelectorAll(".animate");
 
-            if (menuToggle && sidebar) {
-                menuToggle.addEventListener("click", () => {
-                    sidebar.classList.toggle("hidden");
+                animateElements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add("show");
+                    }, index * 150);
                 });
             }
+
+            document.addEventListener("DOMContentLoaded", animate);
+            document.addEventListener("astro:after-swap", animate);
         </script>
     </body>
 </html>

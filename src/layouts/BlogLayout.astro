@@ -1,50 +1,14 @@
 --- 
-import BlogLink from "../components/BlogLink.astro";
 import Layout from "./Layout.astro";
-import { getCollection } from 'astro:content';
-import { Icon } from "astro-icon/components";
+import Container from "../components/Container.astro";
 
-const posts = (await getCollection('blog')).sort(
-    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const path = Astro.url.pathname;
-const { title, isPostPage = false } = Astro.props;
+const { title } = Astro.props;
 ---
 
-
 <Layout {title}>
-    <div class="grid grid-cols-1 md:grid-cols-[384px_1fr] h-full ">
-        <aside
-      class:list={[
-        "overflow-y-auto bg-neutral-50 rounded-lg border-neutral-200 border-r",
-        { hidden: isPostPage, "md:block": isPostPage },
-      ]}
-    >
-            <h2 class="text-lg font-bold p-3 border-b-1 border-neutral-200 ">All Posts</h2>
-            <nav>
-                <div class="flex flex-col p-2">
-                    {posts.map(post => {
-                        const postUrl = `/blog/${post.slug}`;
-                        const isActive = path.startsWith(postUrl);
-                        return (
-                            <BlogLink href={postUrl} text={post.data.title} date={post.data.pubDate} isActive={isActive}>
-                                
-                            </BlogLink>
-                        )
-                    })}
-                </div>
-            </nav>
-        </aside>
-
-        <div class="overflow-y-auto prose max-w-none">
-      {isPostPage && (
-        <div class="md:hidden p-2">
-          <a href="/blog">
-            <Icon name="heroicons:arrow-left" class="w-8 h-8 text-black" />
-          </a>
-        </div>
-      )}
+  <Container>
+    <article class="prose dark:prose-invert">
       <slot />
-    </div>
-    </div>
+    </article>
+  </Container>
 </Layout>

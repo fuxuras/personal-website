@@ -5,7 +5,9 @@ const blogCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
-    pubDate: z.date(),
+    description: z.string(),
+    date: z.coerce.date(),
+    draft: z.boolean().optional(),
     tags: z.array(z.string()),
   }),
 });
@@ -21,7 +23,18 @@ const projectCollection = defineCollection({
   }),
 });
 
+const commonplaceCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    text: z.string(),
+    author: z.string().optional(),
+    subtext: z.string().optional(),
+    pubDate: z.coerce.date().optional(), // For sorting
+  }),
+});
+
 export const collections = {
   'blog': blogCollection,
-  'project': projectCollection
+  'project': projectCollection,
+  'commonplace': commonplaceCollection
 };

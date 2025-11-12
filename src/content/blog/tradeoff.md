@@ -1,10 +1,9 @@
 --- 
 title: 'Why I Chose Denormalization: A Practical Lesson in System Design Trade-offs'
-pubDate: 2025-08-22
+description: "While I was writing my project, I discovered a bottleneck. I was constantly fetching data from two tables with a JOIN, and this led me to a trade-off. Let’s take a look."
+date: 2025-08-22
 tags: ['software']
 ---
-
-While I was writing my project, I discovered a bottleneck. I was constantly fetching data from two tables with a JOIN, and this led me to a trade-off. Let’s take a look.
 
 First, let’s start with what a “trade-off” is.
 

@@ -1,10 +1,11 @@
 --- 
 title: 'Which loop is faster in Java? A classic for loop, an enhanced for-each, or a modern Stream?'
-pubDate: 2025-09-18
+description: "As a recent computer engineering graduate, I often use different types of loops in my personal projects - the classic for, the enhanced for-each, and stream().forEach(). I used them interchangeably without thinking much about their performance. So, I got curious: which one is actually faster?"
+date: 2025-09-18
 tags: ['software']
 ---
 
-## Which loop is faster in Java? A classic for loop, an enhanced for-each, or a modern Stream?
+
 As a recent computer engineering graduate, I often use different types of loops in my personal projects - the classic for, the enhanced for-each, and stream().forEach(). I used them interchangeably without thinking much about their performance. So, I got curious: which one is actually faster?
 
 To find an answer, I decided to run my own benchmark. I measured the execution time of these loops on ArrayLists of various sizes.
