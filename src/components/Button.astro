@@ -1,18 +1,24 @@
 ---
-import { Icon } from 'astro-icon/components'
-const {href, target ,text, isActive = false, iconName} = Astro.props;
+import { cn } from "../lib/utils";
+import { Icon } from "astro-icon/components";
+const {
+    href,
+    target,
+    text,
+    isActive = false,
+    iconName,
+    class: className,
+} = Astro.props;
 ---
 
-<a 
-    href={href} 
+<a
+    href={href}
     target={target}
-    class:list={[
+    class={cn(
         "p-2 rounded-lg transition-colors flex gap-2",
-        {
-            "bg-neutral-950 text-white": isActive,
-            "hover:bg-neutral-200": !isActive
-        }
-    ]}
+        isActive ? "bg-neutral-950 text-white" : "hover:bg-neutral-200",
+        className,
+    )}
 >
     {iconName && <Icon name={iconName} class="size-5 shrink-0" />}
     <span>{text}</span>

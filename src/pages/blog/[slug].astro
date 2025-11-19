@@ -1,19 +1,19 @@
 ---
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
-import { readingTime } from '../../lib/utils';
-import BackToPrev from '../../components/BackToPrev.astro';
-import Container from '../../components/Container.astro';
-import LanguageSwitcher from '../../components/LanguageSwitcher.astro';
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+import { readingTime } from "../../lib/utils";
+import BackToPrev from "../../components/BackToPrev.astro";
+import Container from "../../components/Container.astro";
+import LanguageSwitcher from "../../components/LanguageSwitcher.astro";
 
 export async function getStaticPaths() {
-  const posts = (await getCollection('blog'))
-    .filter(post => !post.data.draft)
+  const posts = (await getCollection("blog"))
+    .filter((post) => !post.data.draft)
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-  
-  return posts.map(post => ({
-    params: { slug: post.slug }, 
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
     props: { post },
   }));
 }
@@ -23,29 +23,34 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BlogLayout title={post.data.title}>
-  <div class="flex justify-between items-center animate">
-    <BackToPrev href="/blog">
-      Back to blog
-    </BackToPrev>
-    <LanguageSwitcher lang={post.data.lang} translationSlug={post.data.translation} />
-  </div>
-  <div class="space-y-1 my-10 animate">
-    <div class="animate flex items-center gap-1.5">
-      <div class="font-base text-sm text-muted-foreground">
-        <FormattedDate date={post.data.date} />
+<Layout title={post.data.title}>
+  <Container>
+    <article class="prose dark:prose-invert font-inter">
+      <div class="flex justify-between items-center animate">
+        <BackToPrev href="/blog"> Back to blog </BackToPrev>
+        <LanguageSwitcher
+          lang={post.data.lang}
+          translationSlug={post.data.translation}
+        />
       </div>
-      &bull;
-      <div class="font-base text-sm text-muted-foreground">
-        {readingTime(post.body)}
+      <div class="space-y-1 my-10 animate">
+        <div class="animate flex items-center gap-1.5">
+          <div class="font-base text-sm text-muted-foreground">
+            <FormattedDate date={post.data.date} />
+          </div>
+          &bull;
+          <div class="font-base text-sm text-muted-foreground">
+            {readingTime(post.body)}
+          </div>
+        </div>
+        <div class="animate text-2xl font-semibold text-foreground">
+          {post.data.title}
+        </div>
+        <div class="animate text-lg text-muted-foreground">
+          {post.data.description}
+        </div>
       </div>
-    </div>
-    <div class="animate text-2xl font-semibold text-foreground">
-      {post.data.title}
-    </div>
-    <div class="animate text-lg text-muted-foreground">
-      {post.data.description}
-    </div>
-  </div>
-  <Content />
-</BlogLayout>
+      <Content />
+    </article>
+  </Container>
+</Layout>
