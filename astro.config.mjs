@@ -13,7 +13,12 @@ export default defineConfig({
   integrations: [icon(), react(), sitemap()],
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/api': 'http://localhost:8085'
+      }
+    }
   },
 
   image: {

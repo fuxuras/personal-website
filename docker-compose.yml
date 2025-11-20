@@ -1,0 +1,9 @@
+services:
+  view-counter:
+    build: ./backend
+    container_name: view-counter
+    ports:
+      - "8085:8080"
+    volumes:
+      - ./backend/data:/root/data
+    restart: always
