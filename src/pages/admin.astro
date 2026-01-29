@@ -1,0 +1,99 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/Container.astro";
+import Frame from "../components/Frame.astro";
+
+const rawBase = import.meta.env.PUBLIC_API_BASE ?? "";
+const apiBase = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+const actionUrl = `${apiBase}/api/feed`;
+---
+
+<Layout title="Admin">
+  <Container>
+    <section class="stack">
+      <Frame class="p-5 space-y-3">
+        <div class="caption">Admin</div>
+        <h1 class="text-2xl font-semibold tracking-tight">Add a Feed Post</h1>
+        <p class="text-sm text-muted-foreground">
+          Submitting will prompt for Basic Auth credentials.
+        </p>
+      </Frame>
+
+      <Frame class="p-5">
+        <form id="feed-form" action={actionUrl} method="post" class="space-y-4">
+          <label class="block space-y-2">
+            <span class="caption">Title</span>
+            <input
+              name="title"
+              required
+              class="w-full border border-border bg-background px-3 py-2 text-sm"
+              placeholder="Post title"
+            />
+          </label>
+
+          <label class="block space-y-2">
+            <span class="caption">Content</span>
+            <textarea
+              name="content"
+              required
+              rows={8}
+              class="w-full border border-border bg-background px-3 py-2 text-sm"
+              placeholder="Write the post content"
+            ></textarea>
+          </label>
+
+          <div class="flex items-center gap-4">
+            <button
+              type="submit"
+              class="inline-flex items-center gap-2 border border-border bg-foreground text-background px-4 py-2 text-xs uppercase tracking-[0.25em] font-mono"
+            >
+              Publish
+            </button>
+            <span class="text-xs text-muted-foreground font-mono uppercase tracking-[0.2em]">
+              Feed posts are append-only
+            </span>
+          </div>
+        </form>
+      </Frame>
+    </section>
+  </Container>
+
+  <script>
+    const form = document.getElementById('feed-form');
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const username = window.prompt('Feed username');
+      if (!username) return;
+      const password = window.prompt('Feed password');
+      if (!password) return;
+
+      const formData = new FormData(form);
+      const payload = {
+        title: formData.get('title'),
+        content: formData.get('content'),
+      };
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Basic ' + btoa(`${username}:${password}`),
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          const text = await res.text();
+          window.alert(text || `Request failed (${res.status})`);
+          return;
+        }
+
+        form.reset();
+        window.alert('Post created.');
+      } catch (error) {
+        window.alert('Request failed.');
+      }
+    });
+  </script>
+</Layout>

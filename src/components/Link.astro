@@ -6,7 +6,7 @@ const { href, class: className, ...rest } = Astro.props;
 <a
   href={href}
   class={cn(
-    "inline-block text-current hover:text-foreground transition-colors text-sm sm:text-base underline underline-offset-4 decoration-border hover:decoration-foreground",
+    "inline-flex items-center text-[11px] font-mono uppercase tracking-[0.3em] text-muted-foreground hover:text-foreground transition-colors",
     className,
   )}
   {...rest}

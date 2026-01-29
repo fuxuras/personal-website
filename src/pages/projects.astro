@@ -9,11 +9,12 @@ const projects = await getCollection('project');
 
 <Layout title="Projects">
   <Container>
-    <div class="space-y-10">
-      <div class="font-semibold text-black dark:text-white text-xl animate">
-        Projects
+    <div class="stack">
+      <div class="frame p-5 space-y-2">
+        <div class="caption">Builds</div>
+        <div class="text-2xl font-semibold tracking-tight">Projects</div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate">
+      <div class="tile-grid grid grid-cols-1 md:grid-cols-2 gap-0 md:[&>*:nth-child(2n)]:border-l md:[&>*:nth-child(2n)]:border-border">
         {projects.map(project => (
             <ProjectCard project={project} />
         ))}

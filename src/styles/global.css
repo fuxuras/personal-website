@@ -1,11 +1,10 @@
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
 
 html {
-  font-family: 'Jetbrains Mono', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 @theme inline {
@@ -47,72 +46,42 @@ html {
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --radius: 0.5rem;
+  --background: oklch(0.97 0 0);
+  --foreground: oklch(0.18 0 0);
+  --card: oklch(0.985 0 0);
+  --card-foreground: oklch(0.18 0 0);
+  --popover: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.18 0 0);
+  --primary: oklch(0.18 0 0);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.18 0 0);
+  --muted: oklch(0.94 0 0);
+  --muted-foreground: oklch(0.52 0 0);
+  --accent: oklch(0.92 0 0);
+  --accent-foreground: oklch(0.18 0 0);
+  --destructive: oklch(0.5 0.2 27.325);
+  --border: oklch(0.86 0 0);
+  --input: oklch(0.86 0 0);
+  --ring: oklch(0.7 0 0);
+  --chart-1: oklch(0.4 0 0);
+  --chart-2: oklch(0.55 0 0);
+  --chart-3: oklch(0.7 0 0);
+  --chart-4: oklch(0.3 0 0);
+  --chart-5: oklch(0.85 0 0);
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.18 0 0);
+  --sidebar-primary: oklch(0.18 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar-accent: oklch(0.94 0 0);
+  --sidebar-accent-foreground: oklch(0.18 0 0);
+  --sidebar-border: oklch(0.86 0 0);
+  --sidebar-ring: oklch(0.7 0 0);
+  --grid-size: 24px;
+  --grid-major: 120px;
+  --grid-line: color-mix(in oklab, oklch(0.18 0 0) 8%, transparent);
+  --grid-line-strong: color-mix(in oklab, oklch(0.18 0 0) 16%, transparent);
 }
 
 @layer base {
@@ -121,36 +90,93 @@ html {
   }
 
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-    background-color: var(--background);
-    background-size: 128px 128px;
-    background-repeat: repeat;
-    background-blend-mode: overlay;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  a,
+  button {
+    cursor: pointer;
+  }
+
+  input,
+  textarea {
+    cursor: text;
   }
 
   header {
-    @apply fixed top-0 left-0 right-0 z-10 bg-background/80 backdrop-blur-sm py-6;
+    @apply sticky top-0 left-0 right-0 z-10 bg-background/95 backdrop-blur-sm py-4 border-b border-border;
   }
 
   main {
-    @apply py-28;
+    @apply py-0 flex-1;
   }
 
-  footer {
-    @apply py-5 text-sm text-muted-foreground;
+  .site-footer {
+    @apply py-5 text-sm text-muted-foreground border-t border-border;
   }
-}
-
-.animate {
-  @apply opacity-0 translate-y-3;
-  @apply transition-all duration-700 ease-out;
-}
-
-.animate.show {
-  @apply opacity-100 translate-y-0;
 }
 
 .font-inter {
   font-family: 'Inter', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@layer components {
+  .site-frame {
+    @apply min-h-screen border-l border-r border-border;
+    width: min(720px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .frame {
+    @apply border-y border-border bg-background text-card-foreground;
+  }
+
+  .frame-inset {
+    @apply border border-border bg-background/60;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .stack > * + * {
+    margin-top: -1px;
+  }
+
+  .stack > .frame {
+    border-top-width: 0;
+  }
+
+  .stack.keep-top > .frame:first-child {
+    border-top-width: 1px;
+  }
+
+  .tile-grid {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tile {
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+  }
+
+  .caption {
+    @apply text-[11px] uppercase tracking-[0.3em] text-muted-foreground font-mono;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold tracking-tight;
+  }
+
+  .hairline-divider {
+    @apply border-t border-border;
+  }
 }

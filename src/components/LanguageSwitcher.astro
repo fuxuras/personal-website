@@ -17,6 +17,6 @@ if (!translatedPost) {
 const targetLang = lang === "en" ? "Turkish" : "English";
 const href = `/blog/${translatedPost.slug}`;
 ---
-<a href={href} class="text-muted-foreground hover:text-foreground transition-colors">
+<a href={href} class="text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors">
   Read in {targetLang} &rarr;
 </a>

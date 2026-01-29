@@ -15,8 +15,8 @@ const {
     href={href}
     target={target}
     class={cn(
-        "p-2 rounded-lg transition-colors flex gap-2",
-        isActive ? "bg-neutral-950 text-white" : "hover:bg-neutral-200",
+        "inline-flex items-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono transition-colors",
+        isActive ? "bg-foreground text-background" : "bg-background hover:bg-muted",
         className,
     )}
 >

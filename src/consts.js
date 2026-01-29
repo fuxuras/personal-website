@@ -15,6 +15,10 @@ export const NAV_LINKS = [
         text: "Commonplace",
         href: "/commonplace",
     },
+    {
+        text: "Feed",
+        href: "/feed",
+    },
 ];
 
 export const SOCIAL_LINKS = [

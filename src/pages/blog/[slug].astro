@@ -27,34 +27,32 @@ const { Content } = await post.render();
 
 <Layout title={post.data.title}>
   <Container>
-    <article class="prose dark:prose-invert font-inter">
-      <div class="flex justify-between items-center animate">
+    <article class="prose prose-neutral max-w-none stack">
+      <div class="flex justify-between items-center frame p-4">
         <BackToPrev href="/blog"> Back to blog </BackToPrev>
         <LanguageSwitcher
           lang={post.data.lang}
           translationSlug={post.data.translation}
         />
       </div>
-      <div class="space-y-1 my-10 animate">
-        <div class="animate flex items-center gap-1.5">
-          <div class="font-base text-sm text-muted-foreground">
-            <FormattedDate date={post.data.date} />
-          </div>
-          &bull;
-          <div class="font-base text-sm text-muted-foreground">
-            {readingTime(post.body)}
-          </div>
-          &bull;
+      <div class="frame p-5 space-y-2">
+        <div class="flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-mono text-muted-foreground">
+          <span><FormattedDate date={post.data.date} /></span>
+          <span>•</span>
+          <span>{readingTime(post.body)}</span>
+          <span>•</span>
           <ViewCounter client:load slug={post.slug} />
         </div>
-        <div class="animate text-2xl font-semibold text-foreground">
+        <div class="text-2xl font-semibold text-foreground">
           {post.data.title}
         </div>
-        <div class="animate text-lg text-muted-foreground">
+        <div class="text-sm text-muted-foreground">
           {post.data.description}
         </div>
       </div>
-      <Content />
+      <div class="frame p-6">
+        <Content />
+      </div>
     </article>
   </Container>
 </Layout>

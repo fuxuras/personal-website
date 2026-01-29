@@ -4,13 +4,13 @@ import { Icon } from "astro-icon/components";
 const { project } = Astro.props;
 ---
 
-<div class="h-full flex flex-col rounded-lg border border-border bg-card p-6 shadow-sm">
-    <h3 class="text-lg font-bold text-card-foreground">{project.data.title}</h3>
+<div class="h-full flex flex-col tile p-5 last:border-b-0">
+    <h3 class="text-base font-semibold tracking-tight">{project.data.title}</h3>
     <p class="mt-2 text-sm text-muted-foreground flex-grow">{project.data.description}</p>
 
     <div class="mt-4 flex flex-wrap gap-2">
         {project.data.tags.map((tag: string) => (
-            <span class="rounded-full bg-accent px-2.5 py-0.5 text-xs font-medium text-accent-foreground">
+            <span class="border border-border px-2.5 py-0.5 text-[11px] uppercase tracking-[0.2em] font-mono text-muted-foreground">
                 {tag}
             </span>
         ))}
@@ -18,13 +18,13 @@ const { project } = Astro.props;
 
     <div class="mt-6 flex items-center gap-4 text-sm">
         {project.data.repoUrl && (
-            <a href={project.data.repoUrl} target="_blank" class="flex items-center gap-1.5 font-medium text-muted-foreground hover:text-foreground">
+            <a href={project.data.repoUrl} target="_blank" class="flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] font-mono text-muted-foreground hover:text-foreground">
                 <Icon name="simple-icons:github" class="size-4" />
                 <span>GitHub</span>
             </a>
         )}
         {project.data.liveUrl && (
-            <a href={project.data.liveUrl} target="_blank" class="flex items-center gap-1.5 font-medium text-primary hover:text-primary/80">
+            <a href={project.data.liveUrl} target="_blank" class="flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] font-mono text-foreground hover:text-muted-foreground">
                 <Icon name="heroicons:arrow-top-right-on-square" class="size-4" />
                 <span>Live Demo</span>
             </a>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getApiBase } from '../lib/api';
 
 interface ViewCounterProps {
     slug: string;
@@ -6,6 +7,7 @@ interface ViewCounterProps {
 
 export default function ViewCounter({ slug }: ViewCounterProps) {
     const [views, setViews] = useState<number | null>(null);
+    const apiBase = getApiBase();
 
     useEffect(() => {
         const fetchViews = async () => {
@@ -15,7 +17,7 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
 
                 const method = hasViewed ? 'GET' : 'POST';
 
-                const res = await fetch(`/api/views/${slug}`, {
+                const res = await fetch(`${apiBase}/api/views/${slug}`, {
                     method: method,
                 });
 
@@ -36,11 +38,11 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
     }, [slug]);
 
     if (views === null) {
-        return <span className="animate-pulse">...</span>;
+        return <span>...</span>;
     }
 
     return (
-        <span className="text-sm text-gray-500">
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-muted-foreground">
             {views.toLocaleString()} views
         </span>
     );

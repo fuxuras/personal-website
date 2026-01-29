@@ -10,12 +10,15 @@ const quotes = (await getCollection('commonplace'))
 
 <Layout title="Commonplace">
     <Container>
-        <div class="space-y-10">
-            <div class="font-semibold text-black dark:text-white text-xl animate">
-                Commonplace
+        <div class="stack">
+            <div class="frame p-5 space-y-2">
+                <div class="caption">Archive</div>
+                <div class="text-2xl font-semibold tracking-tight">Commonplace</div>
+                <p class="text-sm text-muted-foreground max-w-3xl">
+                  A collection of quotes, passages, and ideas from books, people, and my own thoughts.
+                </p>
             </div>
-            <p class="text-lg text-muted-foreground max-w-3xl animate">A collection of quotes, passages, and ideas from books, people, and my own thoughts.</p>
-            <div class="grid grid-cols-1 gap-8 animate">
+            <div class="frame divide-y divide-border border-t border-border">
                 {quotes.map(quote => (
                     <QuoteCard quote={quote} />
                 ))}

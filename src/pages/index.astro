@@ -3,30 +3,33 @@ import Layout from "../layouts/Layout.astro";
 import { SOCIAL_LINKS } from "../consts.js";
 import { Icon } from "astro-icon/components";
 import Container from "../components/Container.astro";
+import Frame from "../components/Frame.astro";
 ---
 
 <Layout title="Homepage">
     <Container>
-        <div class="space-y-12">
-            <div class="animate">
-                <h1 class="text-xl font-bold">Furkancan Okal</h1>
-                <p class="mt-4 text-lg text-muted-foreground">
-                    Average Java Spring Boot and Go enjoyer
+        <div class="stack">
+            <Frame class="p-5 space-y-3">
+                <div class="caption">Profile</div>
+                <h1 class="text-2xl font-semibold tracking-tight">Furkancan Okal</h1>
+                <p class="text-sm text-muted-foreground">
+                    Java Spring Boot and Go enjoyer.
                 </p>
-                <p class="mt-2 text-lg text-muted-foreground">Lifelong Learner</p>
-            </div>
+                <p class="text-sm text-muted-foreground">Lifelong learner.</p>
+            </Frame>
 
-            <section class="space-y-4 animate">
-                <h2 class="text-xl font-bold">Let's Connect</h2>
-                <div class="flex flex-wrap gap-x-6 gap-y-4 pt-2">
+            <Frame class="p-5 space-y-4">
+                <div class="caption">Coordinates</div>
+                <h2 class="text-lg font-semibold tracking-tight">Let's Connect</h2>
+                <div class="flex flex-wrap gap-3">
                     {SOCIAL_LINKS.map(link => (
-                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 p-2 -m-2 rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors">
-                            <Icon name={link.icon} class="w-6 h-6" />
-                            <span class="text-base font-medium">{link.name}</span>
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                            <Icon name={link.icon} class="w-4 h-4" />
+                            <span>{link.name}</span>
                         </a>
                     ))}
                 </div>
-            </section>
+            </Frame>
         </div>
     </Container>
 </Layout>

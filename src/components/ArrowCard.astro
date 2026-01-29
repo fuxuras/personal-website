@@ -8,9 +8,9 @@ type Props = {
 const { entry } = Astro.props;
 ---
 
-<a href={`/${entry.collection}/${entry.slug}`} class="group flex flex-col justify-between py-3 px-4 rounded-lg border border-border hover:bg-accent hover:text-accent-foreground transition-colors duration-300 ease-in-out">
+<a href={`/${entry.collection}/${entry.slug}`} class="group flex flex-col justify-between py-4 px-6 hover:bg-muted transition-colors duration-300 ease-in-out">
   <div class="flex flex-col flex-1">
-    <div class="font-semibold">
+    <div class="text-base font-semibold tracking-tight">
       {entry.data.title}
     </div>
     <div class="text-sm text-muted-foreground line-clamp-2">

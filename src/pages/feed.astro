@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/Container.astro";
+import FeedList from "../components/FeedList";
+---
+
+<Layout title="Feed">
+  <Container>
+    <section class="stack">
+      <div class="frame p-5 space-y-2">
+        <div class="caption">Dynamic Feed</div>
+        <h1 class="text-2xl font-semibold tracking-tight">Live Notes</h1>
+        <p class="text-sm text-muted-foreground max-w-2xl">
+          A continuous stream of short posts, newest first. Scroll to load more.
+        </p>
+      </div>
+      <div class="frame">
+        <FeedList client:load />
+      </div>
+    </section>
+  </Container>
+</Layout>
