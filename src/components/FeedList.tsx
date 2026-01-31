@@ -84,26 +84,28 @@ export default function FeedList() {
   }, [loadMore]);
 
   return (
-    <div className="stack">
-      {posts.map((post) => (
-        <article key={post.id} className="frame p-5 space-y-3">
-          <header className="flex flex-wrap items-start justify-between gap-3">
-            <h2 className="text-base font-semibold tracking-tight">
-              {post.title}
-            </h2>
-            <span className="caption">{formatDate(post.createdAt)}</span>
-          </header>
-          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
-            {post.content}
-          </p>
-        </article>
-      ))}
+    <div className="frame border-x border-border">
+      <div className="stack keep-top">
+        {posts.map((post) => (
+          <article key={post.id} className="frame p-5 space-y-3">
+            <header className="flex flex-wrap items-start justify-between gap-3">
+              <h2 className="text-base font-semibold tracking-tight">
+                {post.title}
+              </h2>
+              <span className="caption">{formatDate(post.createdAt)}</span>
+            </header>
+            <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
+              {post.content}
+            </p>
+          </article>
+        ))}
 
-      {error && (
-        <div className="frame p-4 text-sm text-destructive">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="frame p-4 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+      </div>
 
       <div ref={sentinelRef} className="h-8"></div>
 
