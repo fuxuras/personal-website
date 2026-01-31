@@ -1,11 +1,14 @@
 services:
   view-counter:
     build: ./backend
-    container_name: view-counter
-    ports:
-      - "8080:8080"
+    container_name: fuxuras-api
     env_file:
       - .env
     volumes:
       - ./backend/data:/root/data
     restart: always
+    networks:
+      - web_network
+networks:
+  web_network:
+    external: true
