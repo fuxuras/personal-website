@@ -85,7 +85,7 @@ export default function FeedList() {
   }, [loadMore]);
 
   return (
-    <div className="frame border-x border-border">
+    <div className="frame border-t-0">
       <div>
         {posts.map((post, index) => (
           <article

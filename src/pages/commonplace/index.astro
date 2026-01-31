@@ -18,7 +18,7 @@ const quotes = (await getCollection('commonplace'))
                   A collection of quotes, passages, and ideas from books, people, and my own thoughts.
                 </p>
             </div>
-            <div class="frame divide-y divide-border border-t border-border">
+            <div class="frame divide-y divide-border border-t border-border border-b-0">
                 {quotes.map(quote => (
                     <QuoteCard quote={quote} />
                 ))}
