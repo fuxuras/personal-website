@@ -6,11 +6,11 @@ type Props = {
 const { href } = Astro.props;
 ---
  
-<a href={href} class="group w-fit flex items-center gap-2 px-3 py-2 border border-border text-xs uppercase tracking-[0.25em] font-mono hover:bg-muted transition-colors duration-300 ease-in-out">
-  <span class="text-base font-thin text-muted-foreground group-hover:text-foreground transition-colors">
-    &lt;
+<a href={href} class="group inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-mono text-muted-foreground hover:text-foreground transition-colors">
+  <span class="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+    ←
   </span>
-  <div class="text-xs">
+  <span class="text-xs">
     <slot/>
-  </div>
+  </span>
 </a>
