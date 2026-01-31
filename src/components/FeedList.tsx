@@ -86,7 +86,6 @@ export default function FeedList() {
 
   return (
     <div className="frame border-x border-border">
-<<<<<<< HEAD
       <div>
         {posts.map((post, index) => (
           <article
