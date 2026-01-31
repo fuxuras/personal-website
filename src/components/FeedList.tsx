@@ -24,6 +24,7 @@ function formatDate(value: string) {
   return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'medium',
     timeStyle: 'short',
+    hour12: false,
   }).format(date);
 }
 
@@ -85,9 +86,12 @@ export default function FeedList() {
 
   return (
     <div className="frame border-x border-border">
-      <div className="stack keep-top">
-        {posts.map((post) => (
-          <article key={post.id} className="frame p-5 space-y-3">
+      <div>
+        {posts.map((post, index) => (
+          <article
+            key={post.id}
+            className="p-5 space-y-3 border-b border-border last:border-b-0"
+          >
             <header className="flex flex-wrap items-start justify-between gap-3">
               <h2 className="text-base font-semibold tracking-tight">
                 {post.title}
@@ -101,7 +105,7 @@ export default function FeedList() {
         ))}
 
         {error && (
-          <div className="frame p-4 text-sm text-destructive">
+          <div className="p-4 text-sm text-destructive">
             {error}
           </div>
         )}
