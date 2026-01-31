@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { marked } from 'marked';
 import { getApiBase } from '../lib/api';
 
 type FeedPost = {
@@ -18,13 +17,6 @@ type FeedResponse = {
 };
 
 const LIMIT = 20;
-
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-  headerIds: false,
-  mangle: false,
-});
 
 function formatDate(value: string) {
   const date = new Date(value);
@@ -108,7 +100,7 @@ export default function FeedList() {
             </div>
             <div
               className="feed-content text-sm leading-relaxed text-muted-foreground"
-              dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
+              dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </article>
         ))}
