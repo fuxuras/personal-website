@@ -92,12 +92,12 @@ export default function FeedList() {
             key={post.id}
             className="p-5 space-y-3 border-b border-border last:border-b-0"
           >
-            <header className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
               <h2 className="text-base font-semibold tracking-tight">
                 {post.title}
               </h2>
               <span className="caption">{formatDate(post.createdAt)}</span>
-            </header>
+            </div>
             <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-line">
               {post.content}
             </p>
