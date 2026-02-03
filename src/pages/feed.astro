@@ -6,19 +6,50 @@ import FeedList from "../components/FeedList";
 
 <Layout title="Feed">
   <Container>
-    <section class="stack">
-      <div class="frame p-5 space-y-2">
-        <div class="caption">Akış</div>
-        <h1 class="text-2xl font-semibold tracking-tight">Rastgele düşünceler</h1>
-        <p class="text-sm text-muted-foreground max-w-2xl">
-          Bu bölümde anadilimde düşüncelerimi not ediyorum. Merak ediyorsanız
-          çeviriyle okuyabilirsiniz.
-        </p>
-        <p class="text-xs uppercase tracking-[0.3em] font-mono text-muted-foreground">
-          This section is in my native language. Feel free to translate if you're curious.
-        </p>
+    <section class="space-y-0">
+      <div class="frame p-4 text-sm text-muted-foreground border-b border-border border-t-0 bg-muted/40" data-feed-notice>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <div class="caption mb-2">Notice</div>
+            <div class="font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              --- This section is in my native language. Feel free to translate if you're curious. ---
+            </div>
+          </div>
+          <button
+            type="button"
+            data-feed-notice-close
+            aria-label="Dismiss notice"
+            class="text-xs font-mono uppercase tracking-[0.25em] text-destructive hover:text-destructive/80 transition-colors"
+          >
+            ✕
+          </button>
+        </div>
       </div>
-      <FeedList client:load />
+      <div class="stack">
+        <div class="frame p-5 space-y-2">
+          <div class="caption">Akış</div>
+          <h1 class="text-2xl font-semibold tracking-tight">Rastgele düşünceler</h1>
+          <p class="text-sm text-muted-foreground max-w-2xl">
+            Kısa notlardan oluşan, en yeni gönderilerin en üstte olduğu akış.
+          </p>
+        </div>
+        <FeedList client:load />
+      </div>
     </section>
   </Container>
 </Layout>
+
+<script>
+  const key = 'feed_notice_dismissed';
+  const notice = document.querySelector('[data-feed-notice]');
+  const closeBtn = document.querySelector('[data-feed-notice-close]');
+
+  if (localStorage.getItem(key) === '1') {
+    notice?.classList.add('hidden');
+  }
+
+  closeBtn?.addEventListener('click', () => {
+    localStorage.setItem(key, '1');
+    notice?.classList.add('hidden');
+  });
+</script>

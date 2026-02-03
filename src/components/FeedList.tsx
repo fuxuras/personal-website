@@ -145,7 +145,7 @@ export default function FeedList() {
   }, [loadMore]);
 
   return (
-    <div className="frame border-t-0">
+    <div className="frame border-t-0 border-b-0">
       <div>
         {posts.map((post, index) => (
           <article
@@ -174,7 +174,7 @@ export default function FeedList() {
 
       <div ref={sentinelRef} className="h-8"></div>
 
-      <div className="border-t border-border p-4 text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground">
+      <div className="border-t border-border border-b border-border p-4 text-xs font-mono uppercase tracking-[0.25em] text-muted-foreground">
         {loading ? 'Loading' : hasMore ? 'Scroll to load more' : 'End of feed'}
       </div>
     </div>

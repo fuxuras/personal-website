@@ -8,22 +8,22 @@ import { Icon } from "astro-icon/components";
   <Container>
     <div class="flex flex-wrap justify-between items-center gap-4 px-6">
       <div class="caption">&copy; {new Date().getFullYear()} Fuxuras</div>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
           {SOCIAL_LINKS.map(link => (
-              <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.ariaLabel} class="inline-flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors">
+              <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.ariaLabel} class="cta-link">
                   <Icon name={link.icon} class="w-4 h-4" />
                   <span>{link.name}</span>
               </a>
           ))}
           <button
-            id="theme-toggle-footer"
+            data-theme-toggle
             type="button"
             aria-label="Toggle theme"
-            class="inline-flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+            class="cta-link"
           >
             <Icon name="heroicons:sun" class="w-4 h-4 block dark:hidden" />
             <Icon name="heroicons:moon" class="w-4 h-4 hidden dark:block" />
-            <span>Mode</span>
+            <span>Appearance</span>
           </button>
       </div>
     </div>
@@ -31,10 +31,12 @@ import { Icon } from "astro-icon/components";
 </footer>
 
 <script>
-  const themeToggleFooter = document.getElementById("theme-toggle-footer");
+  const toggles = document.querySelectorAll("[data-theme-toggle]");
 
-  themeToggleFooter?.addEventListener("click", () => {
-    const isDark = document.documentElement.classList.toggle("dark");
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+  toggles.forEach((toggle) => {
+    toggle.addEventListener("click", () => {
+      const isDark = document.documentElement.classList.toggle("dark");
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+    });
   });
 </script>

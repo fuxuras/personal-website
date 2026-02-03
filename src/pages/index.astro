@@ -4,6 +4,17 @@ import { SOCIAL_LINKS } from "../consts.js";
 import { Icon } from "astro-icon/components";
 import Container from "../components/Container.astro";
 import Frame from "../components/Frame.astro";
+import FeedPreview from "../components/FeedPreview";
+import { getCollection } from "astro:content";
+import ArrowCard from "../components/ArrowCard.astro";
+import Link from "../components/Link.astro";
+
+const posts = (await getCollection('blog'))
+  .filter(post => !post.data.draft && post.data.lang === 'en')
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+
+const projects = (await getCollection('project')).slice(0, 2);
 ---
 
 <Layout title="Homepage">
@@ -11,12 +22,27 @@ import Frame from "../components/Frame.astro";
         <div class="stack">
             <Frame class="p-5 space-y-3">
                 <div class="caption">Profile</div>
-                <h1 class="text-2xl font-semibold tracking-tight">Furkancan Okal</h1>
-                <p class="text-sm text-muted-foreground">
-                    Java Spring Boot and Go enjoyer.
-                </p>
-                <p class="text-sm text-muted-foreground">Lifelong learner.</p>
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div class="space-y-2">
+                        <h1 class="text-2xl font-semibold tracking-tight">Furkancan Okal</h1>
+                        <p class="text-sm text-muted-foreground">
+                            Java Spring Boot and Go enjoyer.
+                        </p>
+                        <p class="text-sm text-muted-foreground">Lifelong learner.</p>
+                    </div>
+                    <button
+                      data-theme-toggle
+                      type="button"
+                      class="inline-flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <Icon name="heroicons:sun" class="w-4 h-4 block dark:hidden" />
+                      <Icon name="heroicons:moon" class="w-4 h-4 hidden dark:block" />
+                      <span>Appearance</span>
+                    </button>
+                </div>
             </Frame>
+
+            <div class="border-y border-border" aria-hidden="true"></div>
 
             <Frame class="p-5 space-y-4">
                 <div class="caption">Coordinates</div>
@@ -28,6 +54,53 @@ import Frame from "../components/Frame.astro";
                             <span>{link.name}</span>
                         </a>
                     ))}
+                </div>
+            </Frame>
+
+            <div class="border-y border-border" aria-hidden="true"></div>
+
+            <Frame class="p-0 space-y-4">
+                <div class="p-5 space-y-3">
+                <div class="caption">Writes</div>
+                <h2 class="text-lg font-semibold tracking-tight">Came for the technical writings?</h2>
+                </div>
+                <ul class="w-[80%] mx-auto border border-border divide-y divide-border">
+                  {posts.map((post) => (
+                    <li>
+                      <ArrowCard entry={post} />
+                    </li>
+                  ))}
+                </ul>
+                <div class="p-5">
+                  <a href="/blog" class="cta-link">All writes</a>
+                </div>
+            </Frame>
+
+            <div class="border-t border-border" aria-hidden="true"></div>
+
+            <div class="md:grid md:grid-cols-2 gap-0">
+              <Frame class="p-5 space-y-3">
+                <div class="caption">Projects</div>
+                <h2 class="text-lg font-semibold tracking-tight">Curious about my personal coding projects?</h2>
+                <a href="/projects" class="cta-link">All projects</a>
+              </Frame>
+              <Frame class="p-5 space-y-3 border-t border-border md:border-l md:border-border">
+                <div class="caption">Biography</div>
+                <h2 class="text-lg font-semibold tracking-tight">Curious about where I’ve worked before?</h2>
+                <a href="/biography" class="cta-link">View biography</a>
+              </Frame>
+            </div>
+
+            <div class="border-y border-border" aria-hidden="true"></div>
+
+            <Frame class="p-0 space-y-4 border-b-0">
+                <div class="p-5 space-y-3">
+                <div class="caption">Akış</div>
+                <h2 class="text-lg font-semibold tracking-tight">Curious about my personal thoughts?</h2>
+                </div>
+                <FeedPreview client:load />
+                <div class="p-5">
+                  <a href="/feed" class="cta-link">See more</a>
                 </div>
             </Frame>
         </div>

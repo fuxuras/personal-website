@@ -9,12 +9,12 @@ const blogPosts = (await getCollection('blog'))
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Layout title="Blog">
+<Layout title="Writes">
   <Container>
     <div class="stack">
       <div class="frame p-5 space-y-2">
         <div class="caption">Articles</div>
-        <div class="text-2xl font-semibold tracking-tight">Blog</div>
+        <div class="text-2xl font-semibold tracking-tight">Writes</div>
       </div>
       <ul class="frame list-none p-0 m-0 divide-y divide-border">
         {

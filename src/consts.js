@@ -4,7 +4,7 @@ export const NAV_LINKS = [
         href: "/biography",
     },
     {
-        text: "Blog",
+        text: "Writes",
         href: "/blog",
     },
     {
@@ -12,7 +12,7 @@ export const NAV_LINKS = [
         href: "/projects",
     },
     {
-        text: "Feed",
+        text: "Akış",
         href: "/feed",
     },
 ];
