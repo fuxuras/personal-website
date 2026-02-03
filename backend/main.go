@@ -22,6 +22,7 @@ type FeedPost struct {
 	ID        int    `json:"id"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"createdAt"`
+	Views     int    `json:"views"`
 }
 
 type FeedListResponse struct {
@@ -74,6 +75,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	err = ensureFeedViewsTable()
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ensureBlogViewsTable()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	feedUsername = os.Getenv("FEED_USERNAME")
 	feedPassword = os.Getenv("FEED_PASSWORD")
@@ -85,6 +94,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/api/views/", handleViews)
 	mux.HandleFunc("/api/feed", handleFeed)
+	mux.HandleFunc("/api/feed/", handleFeedViews)
 
 	// Middleware
 	handler := corsMiddleware(mux)
@@ -112,7 +122,7 @@ func handleViews(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		getCount(w, slug)
 	case http.MethodPost:
-		incrementCount(w, slug)
+		incrementCount(w, r, slug)
 	case http.MethodOptions:
 		w.WriteHeader(http.StatusOK)
 	default:
@@ -134,24 +144,34 @@ func handleFeed(w http.ResponseWriter, r *http.Request) {
 }
 
 func getCount(w http.ResponseWriter, slug string) {
-	var count int
-	err := db.QueryRow("SELECT count FROM views WHERE slug = ?", slug).Scan(&count)
-	if err == sql.ErrNoRows {
-		count = 0
-	} else if err != nil {
+	var baseCount int
+	err := db.QueryRow("SELECT count FROM views WHERE slug = ?", slug).Scan(&baseCount)
+	if err != nil && err != sql.ErrNoRows {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	respondJSON(w, ViewCount{Slug: slug, Count: count})
+	var uniqueCount int
+	err = db.QueryRow("SELECT COUNT(*) FROM blog_post_views WHERE slug = ?", slug).Scan(&uniqueCount)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, ViewCount{Slug: slug, Count: baseCount + uniqueCount})
 }
 
-func incrementCount(w http.ResponseWriter, slug string) {
-	// Upsert: Insert or Update
+func incrementCount(w http.ResponseWriter, r *http.Request, slug string) {
+	token := strings.TrimSpace(r.Header.Get("X-Viewer-Token"))
+	if token == "" {
+		http.Error(w, "Missing viewer token", http.StatusBadRequest)
+		return
+	}
+
 	_, err := db.Exec(`
-		INSERT INTO views (slug, count) VALUES (?, 1)
-		ON CONFLICT(slug) DO UPDATE SET count = count + 1
-	`, slug)
+		INSERT OR IGNORE INTO blog_post_views (slug, viewer_token, created_at)
+		VALUES (?, ?, ?)
+	`, slug, token, time.Now().UTC().Unix())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -166,8 +186,13 @@ func listFeed(w http.ResponseWriter, r *http.Request) {
 	offset := parsePositiveInt(r.URL.Query().Get("offset"), 0)
 
 	rows, err := db.Query(`
-		SELECT id, content, created_at
-		FROM feed_posts
+		SELECT p.id, p.content, p.created_at, COALESCE(v.view_count, 0)
+		FROM feed_posts p
+		LEFT JOIN (
+			SELECT post_id, COUNT(*) AS view_count
+			FROM feed_post_views
+			GROUP BY post_id
+		) v ON v.post_id = p.id
 		ORDER BY created_at DESC, id DESC
 		LIMIT ? OFFSET ?
 	`, limit, offset)
@@ -181,7 +206,7 @@ func listFeed(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var post FeedPost
 		var createdAt int64
-		if err := rows.Scan(&post.ID, &post.Content, &createdAt); err != nil {
+		if err := rows.Scan(&post.ID, &post.Content, &createdAt, &post.Views); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -249,7 +274,69 @@ func createFeed(w http.ResponseWriter, r *http.Request) {
 		ID:        int(id),
 		Content:   content,
 		CreatedAt: now.Format(time.RFC3339),
+		Views:     0,
 	})
+}
+
+func handleFeedViews(w http.ResponseWriter, r *http.Request) {
+	path := strings.TrimPrefix(r.URL.Path, "/api/feed/")
+	parts := strings.Split(path, "/")
+	if len(parts) != 2 || parts[1] != "views" {
+		http.NotFound(w, r)
+		return
+	}
+
+	postID, err := strconv.Atoi(parts[0])
+	if err != nil || postID <= 0 {
+		http.Error(w, "Invalid post id", http.StatusBadRequest)
+		return
+	}
+
+	switch r.Method {
+	case http.MethodGet:
+		getFeedViews(w, postID)
+	case http.MethodPost:
+		incrementFeedViews(w, r, postID)
+	case http.MethodOptions:
+		w.WriteHeader(http.StatusOK)
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+}
+
+func getFeedViews(w http.ResponseWriter, postID int) {
+	var count int
+	err := db.QueryRow(`
+		SELECT COUNT(*) FROM feed_post_views WHERE post_id = ?
+	`, postID).Scan(&count)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, map[string]interface{}{
+		"postId": postID,
+		"count":  count,
+	})
+}
+
+func incrementFeedViews(w http.ResponseWriter, r *http.Request, postID int) {
+	token := strings.TrimSpace(r.Header.Get("X-Viewer-Token"))
+	if token == "" {
+		http.Error(w, "Missing viewer token", http.StatusBadRequest)
+		return
+	}
+
+	_, err := db.Exec(`
+		INSERT OR IGNORE INTO feed_post_views (post_id, viewer_token, created_at)
+		VALUES (?, ?, ?)
+	`, postID, token, time.Now().UTC().Unix())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	getFeedViews(w, postID)
 }
 
 func respondJSON(w http.ResponseWriter, data interface{}) {
@@ -262,7 +349,7 @@ func corsMiddleware(next http.Handler) http.Handler {
 		// In production, you might want to restrict this to your domain
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Viewer-Token")
 
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
@@ -348,6 +435,32 @@ func ensureFeedTable() error {
 	}
 
 	return tx.Commit()
+}
+
+func ensureFeedViewsTable() error {
+	createSQL := `CREATE TABLE IF NOT EXISTS feed_post_views (
+		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+		"post_id" INTEGER NOT NULL,
+		"viewer_token" TEXT NOT NULL,
+		"created_at" INTEGER NOT NULL,
+		UNIQUE(post_id, viewer_token)
+	);`
+
+	_, err := db.Exec(createSQL)
+	return err
+}
+
+func ensureBlogViewsTable() error {
+	createSQL := `CREATE TABLE IF NOT EXISTS blog_post_views (
+		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+		"slug" TEXT NOT NULL,
+		"viewer_token" TEXT NOT NULL,
+		"created_at" INTEGER NOT NULL,
+		UNIQUE(slug, viewer_token)
+	);`
+
+	_, err := db.Exec(createSQL)
+	return err
 }
 
 func feedHasTitleColumn() (bool, error) {

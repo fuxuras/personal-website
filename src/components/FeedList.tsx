@@ -5,6 +5,7 @@ type FeedPost = {
   id: number;
   content: string;
   createdAt: string;
+  views: number;
 };
 
 type FeedResponse = {
@@ -25,6 +26,28 @@ function formatDate(value: string) {
     timeStyle: 'short',
     hour12: false,
   }).format(date);
+}
+
+function getViewerToken() {
+  const tokenKey = 'viewer_token';
+  let token = localStorage.getItem(tokenKey);
+  if (!token) {
+    token = crypto.randomUUID();
+    localStorage.setItem(tokenKey, token);
+  }
+  return token;
+}
+
+function getViewedFeedSet() {
+  const viewedKey = 'viewer_views_feed';
+  const raw = localStorage.getItem(viewedKey);
+  const ids = raw ? (JSON.parse(raw) as number[]) : [];
+  return new Set(ids);
+}
+
+function setViewedFeedSet(viewed: Set<number>) {
+  const viewedKey = 'viewer_views_feed';
+  localStorage.setItem(viewedKey, JSON.stringify(Array.from(viewed)));
 }
 
 export default function FeedList() {
@@ -51,9 +74,47 @@ export default function FeedList() {
         throw new Error(`Failed to load feed (${res.status})`);
       }
       const data = (await res.json()) as FeedResponse;
-      setPosts((prev) => [...prev, ...data.posts]);
+      const nextPosts = data.posts;
+      setPosts((prev) => [...prev, ...nextPosts]);
       setOffset(data.nextOffset ?? offset + data.posts.length);
       setHasMore(data.hasMore ?? data.posts.length === LIMIT);
+
+      if (typeof window !== 'undefined') {
+        const token = getViewerToken();
+        const viewed = getViewedFeedSet();
+
+        await Promise.all(
+          nextPosts.map(async (post) => {
+            if (viewed.has(post.id)) return;
+            try {
+              const viewRes = await fetch(
+                `${apiBase}/api/feed/${post.id}/views`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'X-Viewer-Token': token,
+                  },
+                }
+              );
+              if (viewRes.ok) {
+                const payload = await viewRes.json();
+                setPosts((current) =>
+                  current.map((item) =>
+                    item.id === post.id
+                      ? { ...item, views: payload.count }
+                      : item
+                  )
+                );
+                viewed.add(post.id);
+              }
+            } catch (viewError) {
+              console.error('Failed to record view', viewError);
+            }
+          })
+        );
+
+        setViewedFeedSet(viewed);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load feed');
     } finally {
@@ -93,6 +154,9 @@ export default function FeedList() {
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
               <span className="caption">{formatDate(post.createdAt)}</span>
+              <span className="text-[11px] uppercase tracking-[0.3em] font-mono text-muted-foreground">
+                {post.views?.toLocaleString()} views
+              </span>
             </div>
             <div
               className="feed-content text-sm leading-relaxed text-muted-foreground"

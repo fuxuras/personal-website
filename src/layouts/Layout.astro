@@ -25,6 +25,17 @@ import "../styles/global.css";
                 document.documentElement.classList.remove('dark');
             }
         </script>
+        <script is:inline>
+            if (typeof localStorage !== 'undefined') {
+                const tokenKey = 'viewer_token';
+                if (!localStorage.getItem(tokenKey)) {
+                    const uuid = typeof crypto !== 'undefined' && crypto.randomUUID
+                        ? crypto.randomUUID()
+                        : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+                    localStorage.setItem(tokenKey, uuid);
+                }
+            }
+        </script>
     </head>
     <body class="relative min-h-screen">
         <div class="relative z-10 site-frame">

@@ -12,13 +12,25 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
     useEffect(() => {
         const fetchViews = async () => {
             try {
-                const storageKey = `viewed_${slug}`;
-                const hasViewed = sessionStorage.getItem(storageKey);
+                const tokenKey = 'viewer_token';
+                const viewedKey = 'viewer_views';
+                let token = localStorage.getItem(tokenKey);
+                if (!token) {
+                    token = crypto.randomUUID();
+                    localStorage.setItem(tokenKey, token);
+                }
+
+                const viewedRaw = localStorage.getItem(viewedKey);
+                const viewed: string[] = viewedRaw ? JSON.parse(viewedRaw) : [];
+                const hasViewed = viewed.includes(slug);
 
                 const method = hasViewed ? 'GET' : 'POST';
 
                 const res = await fetch(`${apiBase}/api/views/${slug}`, {
                     method: method,
+                    headers: {
+                        'X-Viewer-Token': token,
+                    },
                 });
 
                 if (res.ok) {
@@ -26,7 +38,8 @@ export default function ViewCounter({ slug }: ViewCounterProps) {
                     setViews(data.count);
 
                     if (!hasViewed) {
-                        sessionStorage.setItem(storageKey, 'true');
+                        const nextViewed = [...viewed, slug];
+                        localStorage.setItem(viewedKey, JSON.stringify(nextViewed));
                     }
                 }
             } catch (error) {
