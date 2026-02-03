@@ -25,18 +25,7 @@ const projectCollection = defineCollection({
   }),
 });
 
-const commonplaceCollection = defineCollection({
-  type: 'content',
-  schema: z.object({
-    text: z.string(),
-    author: z.string().optional(),
-    subtext: z.string().optional(),
-    pubDate: z.coerce.date().optional(), // For sorting
-  }),
-});
-
 export const collections = {
   'blog': blogCollection,
-  'project': projectCollection,
-  'commonplace': commonplaceCollection
+  'project': projectCollection
 };

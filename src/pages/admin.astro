@@ -22,23 +22,13 @@ const actionUrl = `${apiBase}/api/feed`;
       <Frame class="p-5">
         <form id="feed-form" action={actionUrl} method="post" class="space-y-4">
           <label class="block space-y-2">
-            <span class="caption">Title</span>
-            <input
-              name="title"
-              required
-              class="w-full border border-border bg-background px-3 py-2 text-sm"
-              placeholder="Post title"
-            />
-          </label>
-
-          <label class="block space-y-2">
             <span class="caption">Content</span>
             <textarea
               name="content"
               required
               rows={8}
               class="w-full border border-border bg-background px-3 py-2 text-sm"
-              placeholder="Write the post content"
+              placeholder="Write the post content (HTML allowed)"
             ></textarea>
           </label>
 
@@ -69,7 +59,6 @@ const actionUrl = `${apiBase}/api/feed`;
 
       const formData = new FormData(form);
       const payload = {
-        title: formData.get('title'),
         content: formData.get('content'),
       };
 

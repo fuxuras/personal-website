@@ -3,7 +3,6 @@ import { getApiBase } from '../lib/api';
 
 type FeedPost = {
   id: number;
-  title: string;
   content: string;
   createdAt: string;
 };
@@ -93,9 +92,6 @@ export default function FeedList() {
             className="p-5 space-y-3 border-b border-border last:border-b-0"
           >
             <div className="flex flex-wrap items-start justify-between gap-3">
-              <h2 className="text-base font-semibold tracking-tight">
-                {post.title}
-              </h2>
               <span className="caption">{formatDate(post.createdAt)}</span>
             </div>
             <div

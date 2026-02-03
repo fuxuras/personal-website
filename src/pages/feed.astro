@@ -8,10 +8,14 @@ import FeedList from "../components/FeedList";
   <Container>
     <section class="stack">
       <div class="frame p-5 space-y-2">
-        <div class="caption">Dynamic Feed</div>
-        <h1 class="text-2xl font-semibold tracking-tight">Live Notes</h1>
+        <div class="caption">Akış</div>
+        <h1 class="text-2xl font-semibold tracking-tight">Rastgele düşünceler</h1>
         <p class="text-sm text-muted-foreground max-w-2xl">
-          A continuous stream of short posts, newest first. Scroll to load more.
+          Bu bölümde anadilimde düşüncelerimi not ediyorum. Merak ediyorsanız
+          çeviriyle okuyabilirsiniz.
+        </p>
+        <p class="text-xs uppercase tracking-[0.3em] font-mono text-muted-foreground">
+          This section is in my native language. Feel free to translate if you're curious.
         </p>
       </div>
       <FeedList client:load />

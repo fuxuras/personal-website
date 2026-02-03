@@ -12,10 +12,6 @@ export const NAV_LINKS = [
         href: "/projects",
     },
     {
-        text: "Commonplace",
-        href: "/commonplace",
-    },
-    {
         text: "Feed",
         href: "/feed",
     },

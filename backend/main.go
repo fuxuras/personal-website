@@ -20,7 +20,6 @@ type ViewCount struct {
 
 type FeedPost struct {
 	ID        int    `json:"id"`
-	Title     string `json:"title"`
 	Content   string `json:"content"`
 	CreatedAt string `json:"createdAt"`
 }
@@ -71,13 +70,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	createFeedTableSQL := `CREATE TABLE IF NOT EXISTS feed_posts (
-		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-		"title" TEXT NOT NULL,
-		"content" TEXT NOT NULL,
-		"created_at" INTEGER NOT NULL
-	);`
-	_, err = db.Exec(createFeedTableSQL)
+	err = ensureFeedTable()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -173,7 +166,7 @@ func listFeed(w http.ResponseWriter, r *http.Request) {
 	offset := parsePositiveInt(r.URL.Query().Get("offset"), 0)
 
 	rows, err := db.Query(`
-		SELECT id, title, content, created_at
+		SELECT id, content, created_at
 		FROM feed_posts
 		ORDER BY created_at DESC, id DESC
 		LIMIT ? OFFSET ?
@@ -188,7 +181,7 @@ func listFeed(w http.ResponseWriter, r *http.Request) {
 	for rows.Next() {
 		var post FeedPost
 		var createdAt int64
-		if err := rows.Scan(&post.ID, &post.Title, &post.Content, &createdAt); err != nil {
+		if err := rows.Scan(&post.ID, &post.Content, &createdAt); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -217,39 +210,35 @@ func createFeed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var title string
 	var content string
 	contentType := r.Header.Get("Content-Type")
 	if strings.HasPrefix(contentType, "application/json") {
 		var payload struct {
-			Title   string `json:"title"`
 			Content string `json:"content"`
 		}
 		if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
 			http.Error(w, "Invalid JSON body", http.StatusBadRequest)
 			return
 		}
-		title = strings.TrimSpace(payload.Title)
 		content = strings.TrimSpace(payload.Content)
 	} else {
 		if err := r.ParseForm(); err != nil {
 			http.Error(w, "Invalid form body", http.StatusBadRequest)
 			return
 		}
-		title = strings.TrimSpace(r.FormValue("title"))
 		content = strings.TrimSpace(r.FormValue("content"))
 	}
 
-	if title == "" || content == "" {
-		http.Error(w, "Title and content are required", http.StatusBadRequest)
+	if content == "" {
+		http.Error(w, "Content is required", http.StatusBadRequest)
 		return
 	}
 
 	now := time.Now().UTC()
 	result, err := db.Exec(`
-		INSERT INTO feed_posts (title, content, created_at)
-		VALUES (?, ?, ?)
-	`, title, content, now.Unix())
+		INSERT INTO feed_posts (content, created_at)
+		VALUES (?, ?)
+	`, content, now.Unix())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -258,7 +247,6 @@ func createFeed(w http.ResponseWriter, r *http.Request) {
 	id, _ := result.LastInsertId()
 	respondJSON(w, FeedPost{
 		ID:        int(id),
-		Title:     title,
 		Content:   content,
 		CreatedAt: now.Format(time.RFC3339),
 	})
@@ -312,6 +300,80 @@ func requireFeedAuth(w http.ResponseWriter, r *http.Request) bool {
 	return true
 }
 
+func ensureFeedTable() error {
+	createSQL := `CREATE TABLE IF NOT EXISTS feed_posts (
+		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+		"content" TEXT NOT NULL,
+		"created_at" INTEGER NOT NULL
+	);`
+
+	if _, err := db.Exec(createSQL); err != nil {
+		return err
+	}
+
+	hasTitle, err := feedHasTitleColumn()
+	if err != nil {
+		return err
+	}
+	if !hasTitle {
+		return nil
+	}
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(`CREATE TABLE IF NOT EXISTS feed_posts_new (
+		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+		"content" TEXT NOT NULL,
+		"created_at" INTEGER NOT NULL
+	);`)
+	if err != nil {
+		return err
+	}
+
+	_, err = tx.Exec(`INSERT INTO feed_posts_new (id, content, created_at)
+		SELECT id, content, created_at FROM feed_posts;`)
+	if err != nil {
+		return err
+	}
+
+	if _, err = tx.Exec(`DROP TABLE feed_posts;`); err != nil {
+		return err
+	}
+	if _, err = tx.Exec(`ALTER TABLE feed_posts_new RENAME TO feed_posts;`); err != nil {
+		return err
+	}
+
+	return tx.Commit()
+}
+
+func feedHasTitleColumn() (bool, error) {
+	rows, err := db.Query(`PRAGMA table_info(feed_posts);`)
+	if err != nil {
+		return false, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var cid int
+		var name string
+		var ctype string
+		var notnull int
+		var dfltValue sql.NullString
+		var pk int
+		if err := rows.Scan(&cid, &name, &ctype, &notnull, &dfltValue, &pk); err != nil {
+			return false, err
+		}
+		if name == "title" {
+			return true, nil
+		}
+	}
+
+	return false, rows.Err()
+}
 func loadEnvFile(path string) {
 	data, err := os.ReadFile(path)
 	if err != nil {
