@@ -4,6 +4,12 @@ import Container from "../components/Container.astro";
 
 const milestones = [
     {
+        time: "2026-02",
+        title: "Started Computer Engineering MSc at Ege University",
+        description: "Joined the master's program in Computer Engineering.",
+        education: true,
+    },
+    {
         time: "2026-01",
         title: "Started work in Huawei!",
         description: "Big Yay! What a awesome place to work",
@@ -11,8 +17,9 @@ const milestones = [
     },
     {
         time: "2025-06",
-        title: "Graduated from University",
-        description: "Yay! Welcome to world of unemployment",
+        title: "Graduated from Manisa Celal Bayar University",
+        description: "Graduated with a 3.47 GPA as an honor student.",
+        education: true,
     },
     {
         time: "2025-02",
@@ -64,10 +71,19 @@ const milestones = [
                                     <h3 class="text-base font-semibold text-foreground">
                                         {milestone.title}
                                     </h3>
-                                    {milestone.experience && (
-                                        <span class="ml-auto inline-flex items-center border border-border px-2 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
-                                            Experience
-                                        </span>
+                                    {(milestone.experience || milestone.education) && (
+                                        <div class="ml-auto flex flex-wrap items-center gap-2">
+                                            {milestone.experience && (
+                                                <span class="inline-flex items-center border border-border px-2 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                                                    Experience
+                                                </span>
+                                            )}
+                                            {milestone.education && (
+                                                <span class="inline-flex items-center border border-border px-2 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                                                    Education
+                                                </span>
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                                 <p class="text-sm text-muted-foreground">
