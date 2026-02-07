@@ -53,53 +53,71 @@ import "../styles/global.css";
             <Footer />
         </div>
         <script is:inline>
-            const themeKey = 'theme';
-            const themeSwitch = document.querySelector('[data-theme-switch]');
+            const initPreferences = () => {
+                let storage = null;
+                try {
+                    storage = localStorage;
+                } catch (err) {
+                    storage = null;
+                }
 
-            const setTheme = (value) => {
-                if (value === 'dark') {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
-                if (themeSwitch) {
-                    const isDark = value === 'dark';
-                    themeSwitch.classList.toggle('is-on', isDark);
-                    themeSwitch.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-                }
+                const themeKey = 'theme';
+                const themeSwitch = document.querySelector('[data-theme-switch]');
+
+                const setTheme = (value) => {
+                    if (value === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                    if (themeSwitch) {
+                        const isDark = value === 'dark';
+                        themeSwitch.classList.toggle('is-on', isDark);
+                        themeSwitch.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+                    }
+                };
+
+                const storedTheme = storage?.getItem(themeKey)
+                    || (document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+                setTheme(storedTheme);
+
+                themeSwitch?.addEventListener('click', () => {
+                    const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    storage?.setItem(themeKey, next);
+                    setTheme(next);
+                });
+
+                const audienceKey = 'audience_mode';
+                const switchButton = document.querySelector('[data-audience-switch]');
+
+                const setAudience = (value) => {
+                    document.documentElement.dataset.audience = value;
+                    if (switchButton) {
+                        const isPersonal = value === 'personal';
+                        switchButton.classList.toggle('is-on', isPersonal);
+                        switchButton.setAttribute('aria-pressed', isPersonal ? 'true' : 'false');
+                    }
+                };
+
+                const storedAudience = storage?.getItem(audienceKey)
+                    || document.documentElement.dataset.audience
+                    || 'professional';
+                setAudience(storedAudience);
+
+                switchButton?.addEventListener('click', () => {
+                    const current = document.documentElement.dataset.audience || 'professional';
+                    const next = current === 'professional' ? 'personal' : 'professional';
+                    storage?.setItem(audienceKey, next);
+                    setAudience(next);
+                });
             };
 
-            const storedTheme = localStorage.getItem(themeKey) || 'light';
-            setTheme(storedTheme);
-
-            themeSwitch?.addEventListener('click', () => {
-                const current = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-                const next = current === 'dark' ? 'light' : 'dark';
-                localStorage.setItem(themeKey, next);
-                setTheme(next);
-            });
-
-            const audienceKey = 'audience_mode';
-            const switchButton = document.querySelector('[data-audience-switch]');
-
-            const setAudience = (value) => {
-                document.documentElement.dataset.audience = value;
-                if (switchButton) {
-                    const isPersonal = value === 'personal';
-                    switchButton.classList.toggle('is-on', isPersonal);
-                    switchButton.setAttribute('aria-pressed', isPersonal ? 'true' : 'false');
-                }
-            };
-
-            const storedAudience = localStorage.getItem(audienceKey) || 'professional';
-            setAudience(storedAudience);
-
-            switchButton?.addEventListener('click', () => {
-                const current = document.documentElement.dataset.audience || 'professional';
-                const next = current === 'professional' ? 'personal' : 'professional';
-                localStorage.setItem(audienceKey, next);
-                setAudience(next);
-            });
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initPreferences);
+            } else {
+                initPreferences();
+            }
         </script>
     </body>
 </html>
