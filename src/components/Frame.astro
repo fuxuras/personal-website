@@ -1,8 +1,8 @@
 ---
 import { cn } from "../lib/utils";
-const { class: className } = Astro.props;
+const { class: className, ...rest } = Astro.props;
 ---
 
-<section class={cn("frame", className)}>
+<section class={cn("frame", className)} {...rest}>
   <slot />
 </section>
