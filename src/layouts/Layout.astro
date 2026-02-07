@@ -27,6 +27,13 @@ import "../styles/global.css";
         </script>
         <script is:inline>
             if (typeof localStorage !== 'undefined') {
+                const audienceKey = 'audience_mode';
+                const storedAudience = localStorage.getItem(audienceKey) || 'professional';
+                document.documentElement.dataset.audience = storedAudience;
+            }
+        </script>
+        <script is:inline>
+            if (typeof localStorage !== 'undefined') {
                 const tokenKey = 'viewer_token';
                 if (!localStorage.getItem(tokenKey)) {
                     const uuid = typeof crypto !== 'undefined' && crypto.randomUUID
@@ -45,5 +52,28 @@ import "../styles/global.css";
             </main>
             <Footer />
         </div>
+        <script is:inline>
+            const audienceKey = 'audience_mode';
+            const updateAudienceButtons = (value) => {
+                document.querySelectorAll('[data-audience-toggle]').forEach((button) => {
+                    const isActive = button.dataset.audienceValue === value;
+                    button.classList.toggle('audience-active', isActive);
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+            };
+
+            const storedAudience = localStorage.getItem(audienceKey) || 'professional';
+            document.documentElement.dataset.audience = storedAudience;
+            updateAudienceButtons(storedAudience);
+
+            document.querySelectorAll('[data-audience-toggle]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const next = button.dataset.audienceValue || 'professional';
+                    localStorage.setItem(audienceKey, next);
+                    document.documentElement.dataset.audience = next;
+                    updateAudienceButtons(next);
+                });
+            });
+        </script>
     </body>
 </html>

@@ -20,15 +20,40 @@ import Frame from "../components/Frame.astro";
                         </p>
                         <p class="text-sm text-muted-foreground">Lifelong learner.</p>
                     </div>
-                    <button
-                      data-theme-toggle
-                      type="button"
-                      class="inline-flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      <Icon name="heroicons:sun" class="w-4 h-4 block dark:hidden" />
-                      <Icon name="heroicons:moon" class="w-4 h-4 hidden dark:block" />
-                      <span>Appearance</span>
-                    </button>
+                    <div class="flex flex-col items-start gap-3">
+                      <button
+                        data-theme-toggle
+                        type="button"
+                        class="inline-flex items-center gap-2 px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <Icon name="heroicons:sun" class="w-4 h-4 block dark:hidden" />
+                        <Icon name="heroicons:moon" class="w-4 h-4 hidden dark:block" />
+                        <span>Appearance</span>
+                      </button>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground">
+                          Audience
+                        </span>
+                        <div class="inline-flex border border-border">
+                          <button
+                            type="button"
+                            data-audience-toggle
+                            data-audience-value="professional"
+                            class="px-3 py-2 text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            Professional
+                          </button>
+                          <button
+                            type="button"
+                            data-audience-toggle
+                            data-audience-value="personal"
+                            class="border-l border-border px-3 py-2 text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            Personal
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                 </div>
             </Frame>
 
@@ -75,7 +100,7 @@ import Frame from "../components/Frame.astro";
 
             <div class="border-y border-border" aria-hidden="true"></div>
 
-            <Frame class="p-0 border-b-0">
+            <Frame class="p-0 border-b-0" data-audience="personal">
                 <div class="p-5 space-y-3 pb-0">
                 <div class="caption">Duvar</div>
                 <h2 class="text-lg font-semibold tracking-tight">Curious about my personal thoughts?</h2>

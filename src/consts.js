@@ -14,6 +14,7 @@ export const NAV_LINKS = [
     {
         text: "Duvar",
         href: "/feed",
+        audience: "personal",
     },
 ];
 
