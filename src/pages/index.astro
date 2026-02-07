@@ -26,10 +26,25 @@ import Frame from "../components/Frame.astro";
             <div class="border-y border-border" aria-hidden="true"></div>
 
             <Frame class="p-5 space-y-4">
+                <div class="caption">Coordinates</div>
+                <h2 class="text-lg font-semibold tracking-tight">Let's Connect</h2>
+                <div class="flex flex-wrap gap-3">
+                    {SOCIAL_LINKS.map(link => (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                            <Icon name={link.icon} class="w-4 h-4" />
+                            <span>{link.name}</span>
+                        </a>
+                    ))}
+                </div>
+            </Frame>
+
+            <div class="border-y border-border" aria-hidden="true"></div>
+
+            <Frame class="p-5 space-y-4">
                 <div class="caption">Preferences</div>
-                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div class="flex flex-col items-center gap-2 sm:items-start">
-                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center sm:text-left">
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-left">
                       Appearance
                     </span>
                     <div class="flex items-center gap-3">
@@ -49,8 +64,8 @@ import Frame from "../components/Frame.astro";
                       </span>
                     </div>
                   </div>
-                  <div class="flex flex-col items-center gap-2 sm:items-end">
-                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center">
+                  <div class="flex items-center justify-between gap-4">
+                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-left">
                       Interested in
                     </span>
                     <div class="flex items-center gap-3">
@@ -70,59 +85,6 @@ import Frame from "../components/Frame.astro";
                       </span>
                     </div>
                   </div>
-                </div>
-            </Frame>
-
-            <div class="border-y border-border" aria-hidden="true"></div>
-
-            <Frame class="p-5 space-y-4">
-                <div class="caption">Coordinates</div>
-                <h2 class="text-lg font-semibold tracking-tight">Let's Connect</h2>
-                <div class="flex flex-wrap gap-3">
-                    {SOCIAL_LINKS.map(link => (
-                        <a href={link.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 border border-border px-3 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
-                            <Icon name={link.icon} class="w-4 h-4" />
-                            <span>{link.name}</span>
-                        </a>
-                    ))}
-                </div>
-            </Frame>
-
-            <div class="border-y border-border" aria-hidden="true"></div>
-
-            <Frame class="p-0">
-                <div class="p-5 space-y-3 pb-0">
-                <div class="caption">Writes</div>
-                <h2 class="text-lg font-semibold tracking-tight">Came for the technical writings?</h2>
-                </div>
-                <div class="p-5">
-                  <a href="/blog" class="cta-link">All writes</a>
-                </div>
-            </Frame>
-
-            <div class="border-y border-border" aria-hidden="true"></div>
-
-            <Frame class="p-5 space-y-3">
-              <div class="caption">Projects</div>
-              <h2 class="text-lg font-semibold tracking-tight">Curious about my personal coding projects?</h2>
-              <a href="/projects" class="cta-link">All projects</a>
-            </Frame>
-            <div class="border-y border-border" aria-hidden="true"></div>
-            <Frame class="p-5 space-y-3">
-              <div class="caption">Biography</div>
-              <h2 class="text-lg font-semibold tracking-tight">Curious about where I’ve worked before?</h2>
-              <a href="/biography" class="cta-link">View biography</a>
-            </Frame>
-
-            <div class="border-y border-border" aria-hidden="true" data-audience="personal"></div>
-
-            <Frame class="p-0 border-b-0" data-audience="personal">
-                <div class="p-5 space-y-3 pb-0">
-                <div class="caption">Duvar</div>
-                <h2 class="text-lg font-semibold tracking-tight">Curious about my personal thoughts?</h2>
-                </div>
-                <div class="p-5">
-                  <a href="/feed" class="cta-link">See more</a>
                 </div>
             </Frame>
         </div>
