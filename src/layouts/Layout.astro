@@ -54,25 +54,25 @@ import "../styles/global.css";
         </div>
         <script is:inline>
             const audienceKey = 'audience_mode';
-            const updateAudienceButtons = (value) => {
-                document.querySelectorAll('[data-audience-toggle]').forEach((button) => {
-                    const isActive = button.dataset.audienceValue === value;
-                    button.classList.toggle('audience-active', isActive);
-                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-                });
+            const switchButton = document.querySelector('[data-audience-switch]');
+
+            const setAudience = (value) => {
+                document.documentElement.dataset.audience = value;
+                if (switchButton) {
+                    const isPersonal = value === 'personal';
+                    switchButton.classList.toggle('is-on', isPersonal);
+                    switchButton.setAttribute('aria-pressed', isPersonal ? 'true' : 'false');
+                }
             };
 
             const storedAudience = localStorage.getItem(audienceKey) || 'professional';
-            document.documentElement.dataset.audience = storedAudience;
-            updateAudienceButtons(storedAudience);
+            setAudience(storedAudience);
 
-            document.querySelectorAll('[data-audience-toggle]').forEach((button) => {
-                button.addEventListener('click', () => {
-                    const next = button.dataset.audienceValue || 'professional';
-                    localStorage.setItem(audienceKey, next);
-                    document.documentElement.dataset.audience = next;
-                    updateAudienceButtons(next);
-                });
+            switchButton?.addEventListener('click', () => {
+                const current = document.documentElement.dataset.audience || 'professional';
+                const next = current === 'professional' ? 'personal' : 'professional';
+                localStorage.setItem(audienceKey, next);
+                setAudience(next);
             });
         </script>
     </body>

@@ -12,7 +12,7 @@ import Frame from "../components/Frame.astro";
         <div class="stack">
             <Frame class="p-5 space-y-3">
                 <div class="caption">Profile</div>
-                <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-start justify-between gap-4">
                     <div class="space-y-2">
                         <h1 class="text-2xl font-semibold tracking-tight">Furkancan Okal</h1>
                         <p class="text-sm text-muted-foreground">
@@ -20,7 +20,7 @@ import Frame from "../components/Frame.astro";
                         </p>
                         <p class="text-sm text-muted-foreground">Lifelong learner.</p>
                     </div>
-                    <div class="flex flex-col items-start gap-3">
+                    <div class="ml-auto flex flex-col items-end gap-3 text-right">
                       <button
                         data-theme-toggle
                         type="button"
@@ -30,27 +30,25 @@ import Frame from "../components/Frame.astro";
                         <Icon name="heroicons:moon" class="w-4 h-4 hidden dark:block" />
                         <span>Appearance</span>
                       </button>
-                      <div class="flex flex-wrap items-center gap-2">
+                      <div class="flex flex-col items-end gap-2">
                         <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground">
-                          Audience
+                          Interested in
                         </span>
-                        <div class="inline-flex border border-border">
-                          <button
-                            type="button"
-                            data-audience-toggle
-                            data-audience-value="professional"
-                            class="px-3 py-2 text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
-                          >
+                        <div class="flex items-center gap-3">
+                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
                             Professional
-                          </button>
+                          </span>
                           <button
                             type="button"
-                            data-audience-toggle
-                            data-audience-value="personal"
-                            class="border-l border-border px-3 py-2 text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground hover:text-foreground transition-colors"
+                            data-audience-switch
+                            aria-pressed="false"
+                            class="audience-switch"
                           >
-                            Personal
+                            <span class="audience-switch-thumb"></span>
                           </button>
+                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
+                            Personal
+                          </span>
                         </div>
                       </div>
                     </div>
