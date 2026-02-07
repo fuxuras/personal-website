@@ -201,6 +201,20 @@ html {
     border-bottom: 1px solid var(--border);
   }
 
+  @media (min-width: 768px) {
+    .tile-grid {
+      background-image: linear-gradient(
+        to right,
+        transparent calc(50% - 0.5px),
+        var(--border) calc(50% - 0.5px),
+        var(--border) calc(50% + 0.5px),
+        transparent calc(50% + 0.5px)
+      );
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+    }
+  }
+
   .tile {
     border-bottom: 1px solid var(--border);
     background: var(--background);

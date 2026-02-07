@@ -14,7 +14,7 @@ const projects = await getCollection('project');
         <div class="caption">Builds</div>
         <div class="text-2xl font-semibold tracking-tight">Projects</div>
       </div>
-      <div class="tile-grid grid grid-cols-1 md:grid-cols-2 gap-0 md:[&>*:nth-child(2n)]:border-l md:[&>*:nth-child(2n)]:border-border">
+      <div class="tile-grid grid grid-cols-1 md:grid-cols-2 gap-0">
         {projects.map(project => (
             <ProjectCard project={project} />
         ))}
