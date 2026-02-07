@@ -5,7 +5,7 @@ const { project } = Astro.props;
 ---
 
 <div
-    class="h-full flex flex-col tile p-5 last:border-b-0"
+    class="h-full flex flex-col tile p-5"
     {...(project.data.audience ? { 'data-audience': project.data.audience } : {})}
 >
     <h3 class="text-base font-semibold tracking-tight">{project.data.title}</h3>

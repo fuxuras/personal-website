@@ -212,16 +212,6 @@ html {
     background: var(--background);
   }
 
-  .tile-grid > .tile:last-child {
-    border-bottom: 0;
-  }
-
-  @media (min-width: 768px) {
-    .tile-grid > .tile:nth-last-child(2):nth-child(odd) {
-      border-bottom: 0;
-    }
-  }
-
   .caption {
     @apply text-[11px] uppercase tracking-[0.3em] text-muted-foreground font-mono;
   }
