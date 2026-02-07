@@ -20,50 +20,56 @@ import Frame from "../components/Frame.astro";
                         </p>
                         <p class="text-sm text-muted-foreground">Lifelong learner.</p>
                     </div>
-                    <div class="ml-auto w-full sm:w-auto flex flex-col items-start sm:items-end gap-3 text-left sm:text-right">
-                      <div class="flex flex-col items-stretch gap-2">
-                        <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center sm:text-right">
-                          Appearance
-                        </span>
-                        <div class="flex items-center gap-3 sm:justify-end">
-                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
-                            Light
-                          </span>
-                          <button
-                            type="button"
-                            data-theme-switch
-                            aria-pressed="false"
-                            class="theme-switch"
-                          >
-                            <span class="theme-switch-thumb"></span>
-                          </button>
-                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
-                            Dark
-                          </span>
-                        </div>
-                      </div>
-                      <div class="flex flex-col items-stretch gap-2">
-                        <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center sm:text-right">
-                          Interested in
-                        </span>
-                        <div class="flex items-center gap-3 sm:justify-end">
-                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
-                            Professional
-                          </span>
-                          <button
-                            type="button"
-                            data-audience-switch
-                            aria-pressed="false"
-                            class="audience-switch"
-                          >
-                            <span class="audience-switch-thumb"></span>
-                          </button>
-                          <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
-                            Personal
-                          </span>
-                        </div>
-                      </div>
+                </div>
+            </Frame>
+
+            <div class="border-y border-border" aria-hidden="true"></div>
+
+            <Frame class="p-5 space-y-4">
+                <div class="caption">Preferences</div>
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div class="flex flex-col items-center gap-2 sm:items-start">
+                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center sm:text-left">
+                      Appearance
+                    </span>
+                    <div class="flex items-center gap-3">
+                      <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
+                        Light
+                      </span>
+                      <button
+                        type="button"
+                        data-theme-switch
+                        aria-pressed="false"
+                        class="theme-switch"
+                      >
+                        <span class="theme-switch-thumb"></span>
+                      </button>
+                      <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
+                        Dark
+                      </span>
                     </div>
+                  </div>
+                  <div class="flex flex-col items-center gap-2 sm:items-end">
+                    <span class="text-[10px] uppercase tracking-[0.3em] font-mono text-muted-foreground text-center">
+                      Interested in
+                    </span>
+                    <div class="flex items-center gap-3">
+                      <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
+                        Professional
+                      </span>
+                      <button
+                        type="button"
+                        data-audience-switch
+                        aria-pressed="false"
+                        class="audience-switch"
+                      >
+                        <span class="audience-switch-thumb"></span>
+                      </button>
+                      <span class="text-[10px] uppercase tracking-[0.25em] font-mono text-muted-foreground">
+                        Personal
+                      </span>
+                    </div>
+                  </div>
                 </div>
             </Frame>
 

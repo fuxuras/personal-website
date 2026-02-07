@@ -236,6 +236,10 @@ html {
     display: none;
   }
 
+  html:not([data-audience]) [data-audience="personal"] {
+    display: none;
+  }
+
   .audience-switch {
     width: 44px;
     height: 22px;
