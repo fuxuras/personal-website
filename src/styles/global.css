@@ -229,15 +229,15 @@ html {
   }
 
   html[data-audience="professional"] [data-audience="personal"] {
-    display: none;
+    display: none !important;
   }
 
   html[data-audience="personal"] [data-audience="professional"] {
-    display: none;
+    display: none !important;
   }
 
   html:not([data-audience]) [data-audience="personal"] {
-    display: none;
+    display: none !important;
   }
 
   .audience-switch {
