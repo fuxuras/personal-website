@@ -201,6 +201,10 @@ html {
     border-bottom: 1px solid var(--border);
   }
 
+  .tile-grid.no-bottom {
+    border-bottom: 0;
+  }
+
   @media (min-width: 768px) {
     .tile-grid {
       background-image: none;
