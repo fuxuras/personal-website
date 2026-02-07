@@ -206,6 +206,16 @@ html {
     background: var(--background);
   }
 
+  .tile-grid > .tile:last-child {
+    border-bottom: 0;
+  }
+
+  @media (min-width: 768px) {
+    .tile-grid > .tile:nth-last-child(2):nth-child(odd) {
+      border-bottom: 0;
+    }
+  }
+
   .caption {
     @apply text-[11px] uppercase tracking-[0.3em] text-muted-foreground font-mono;
   }
@@ -226,8 +236,34 @@ html {
     display: none;
   }
 
-  .audience-active {
-    @apply bg-foreground text-background;
+  .audience-switch {
+    width: 44px;
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    padding: 2px;
+    background: var(--background);
+    transition: border-color 200ms ease, background 200ms ease;
+  }
+
+  .audience-switch-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--foreground);
+    transform: translateX(0);
+    transition: transform 200ms ease, background 200ms ease;
+  }
+
+  .audience-switch.is-on {
+    background: var(--foreground);
+  }
+
+  .audience-switch.is-on .audience-switch-thumb {
+    background: var(--background);
+    transform: translateX(20px);
   }
 
   .feed-content p + p {
