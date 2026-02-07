@@ -4,7 +4,7 @@ import Container from "../components/Container.astro";
 import FeedList from "../components/FeedList";
 ---
 
-<Layout title="Feed">
+<Layout title="Duvar">
   <Container>
     <section class="space-y-0">
       <div class="frame p-4 text-sm text-muted-foreground border-b border-border border-t-0 bg-muted/40" data-feed-notice>
@@ -27,10 +27,10 @@ import FeedList from "../components/FeedList";
       </div>
       <div class="stack">
         <div class="frame p-5 space-y-2">
-          <div class="caption">Akış</div>
-          <h1 class="text-2xl font-semibold tracking-tight">Rastgele düşünceler</h1>
+          <div class="caption">Duvar</div>
+          <h1 class="text-2xl font-semibold tracking-tight">Duvara Konuşuyorum</h1>
           <p class="text-sm text-muted-foreground max-w-2xl">
-            Kısa notlardan oluşan, en yeni gönderilerin en üstte olduğu akış.
+            Burada yazanlar da söylediklerimin duvarla benim aramda bir süre dolaştıktan sonra size gelen ekosu.
           </p>
         </div>
         <FeedList client:load />

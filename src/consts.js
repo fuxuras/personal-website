@@ -12,7 +12,7 @@ export const NAV_LINKS = [
         href: "/projects",
     },
     {
-        text: "Akış",
+        text: "Duvar",
         href: "/feed",
     },
 ];

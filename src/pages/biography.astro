@@ -7,6 +7,7 @@ const milestones = [
         time: "2026-01",
         title: "Started work in Huawei!",
         description: "Big Yay! What a awesome place to work",
+        experience: true,
     },
     {
         time: "2025-06",
@@ -17,16 +18,19 @@ const milestones = [
         time: "2025-02",
         title: "Started 5 month internship at Kentkart",
         description: "Met with wonderful people in here. Thanks for everyone",
+        experience: true,
     },
     {
         time: "2024-08",
         title: "Started 1 month internship at Enoca",
         description: "Just an ordinary boring internship",
+        experience: true,
     },
     {
         time: "2024-07",
         title: "Started 1 month internship at PI Works",
         description: "Amazing people but they writing .Net",
+        experience: true,
     },
     {
         time: "2023-11",
@@ -56,9 +60,16 @@ const milestones = [
                                 {milestone.time}
                             </time>
                             <div class="space-y-2">
-                                <h3 class="text-base font-semibold text-foreground">
-                                    {milestone.title}
-                                </h3>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h3 class="text-base font-semibold text-foreground">
+                                        {milestone.title}
+                                    </h3>
+                                    {milestone.experience && (
+                                        <span class="inline-flex items-center border border-border px-2 py-1 text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
+                                            Experience
+                                        </span>
+                                    )}
+                                </div>
                                 <p class="text-sm text-muted-foreground">
                                     {milestone.description}
                                 </p>

@@ -53,7 +53,7 @@ export default function FeedPreview() {
       ))}
       {posts.length === 0 && (
         <div className="p-5 text-sm text-muted-foreground">
-          Akış yüklenemedi.
+          Duvar yüklenemedi.
         </div>
       )}
     </div>
