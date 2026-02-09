@@ -228,47 +228,6 @@ html {
     @apply underline underline-offset-4 text-foreground;
   }
 
-  html[data-audience="professional"] [data-audience="personal"] {
-    display: none !important;
-  }
-
-  html[data-audience="personal"] [data-audience="professional"] {
-    display: none !important;
-  }
-
-  html:not([data-audience]) [data-audience="personal"] {
-    display: none !important;
-  }
-
-  .audience-switch {
-    width: 44px;
-    height: 22px;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    padding: 2px;
-    background: var(--background);
-    transition: border-color 200ms ease, background 200ms ease;
-  }
-
-  .audience-switch-thumb {
-    width: 16px;
-    height: 16px;
-    border-radius: 999px;
-    background: var(--foreground);
-    transform: translateX(0);
-    transition: transform 200ms ease, background 200ms ease;
-  }
-
-  .audience-switch.is-on {
-    background: var(--foreground);
-  }
-
-  .audience-switch.is-on .audience-switch-thumb {
-    background: var(--background);
-    transform: translateX(20px);
-  }
 
   .theme-switch {
     width: 44px;

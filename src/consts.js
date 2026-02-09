@@ -1,22 +1,4 @@
-export const NAV_LINKS = [
-    {
-        text: "Biography",
-        href: "/biography",
-    },
-    {
-        text: "Writes",
-        href: "/blog",
-    },
-    {
-        text: "Projects",
-        href: "/projects",
-    },
-    {
-        text: "Duvar",
-        href: "/feed",
-        audience: "personal",
-    },
-];
+export const NAV_LINKS = [];
 
 export const SOCIAL_LINKS = [
     {

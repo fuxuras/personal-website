@@ -1,7 +1,7 @@
 services:
   view-counter:
     build: ./backend
-    container_name: fuxuras-api
+    container_name: fuxuras-blog-api
     env_file:
       - .env
     volumes:

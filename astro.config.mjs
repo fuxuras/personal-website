@@ -9,7 +9,7 @@ import react from '@astrojs/react';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://fuxuras.dev',
+  site: 'https://blog.fuxuras.dev',
   integrations: [icon(), react(), sitemap()],
 
   vite: {

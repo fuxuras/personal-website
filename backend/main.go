@@ -13,11 +13,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type ViewCount struct {
-	Slug  string `json:"slug"`
-	Count int    `json:"count"`
-}
-
 type FeedPost struct {
 	ID        int    `json:"id"`
 	Content   string `json:"content"`
@@ -43,14 +38,12 @@ func main() {
 	loadEnvFile(".env")
 	loadEnvFile("../.env")
 
-	// Initialize Database
 	var err error
 	dbPath := os.Getenv("DB_PATH")
 	if dbPath == "" {
 		dbPath = "./data/views.db"
 	}
 
-	// Ensure data directory exists
 	if err := os.MkdirAll("./data", 0755); err != nil {
 		log.Fatal(err)
 	}
@@ -61,26 +54,13 @@ func main() {
 	}
 	defer db.Close()
 
-	// Create tables if not exist
-	createViewsTableSQL := `CREATE TABLE IF NOT EXISTS views (
-		"slug" TEXT NOT NULL PRIMARY KEY,
-		"count" INTEGER DEFAULT 0
-	);`
-	_, err = db.Exec(createViewsTableSQL)
-	if err != nil {
+	if err := ensureFeedTable(); err != nil {
 		log.Fatal(err)
 	}
-
-	err = ensureFeedTable()
-	if err != nil {
+	if err := ensureFeedViewsTable(); err != nil {
 		log.Fatal(err)
 	}
-	err = ensureFeedViewsTable()
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = ensureBlogViewsTable()
-	if err != nil {
+	if err := cleanupBlogTables(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -90,13 +70,10 @@ func main() {
 		log.Println("Warning: FEED_USERNAME or FEED_PASSWORD is not set; feed creation will be disabled.")
 	}
 
-	// Router
 	mux := http.NewServeMux()
-	mux.HandleFunc("/api/views/", handleViews)
 	mux.HandleFunc("/api/feed", handleFeed)
 	mux.HandleFunc("/api/feed/", handleFeedViews)
 
-	// Middleware
 	handler := corsMiddleware(mux)
 
 	port := os.Getenv("PORT")
@@ -107,26 +84,6 @@ func main() {
 	log.Printf("Server starting on port %s...", port)
 	if err := http.ListenAndServe(":"+port, handler); err != nil {
 		log.Fatal(err)
-	}
-}
-
-func handleViews(w http.ResponseWriter, r *http.Request) {
-	// Extract slug from path /api/views/{slug}
-	slug := r.URL.Path[len("/api/views/"):]
-	if slug == "" {
-		http.Error(w, "Missing slug", http.StatusBadRequest)
-		return
-	}
-
-	switch r.Method {
-	case http.MethodGet:
-		getCount(w, slug)
-	case http.MethodPost:
-		incrementCount(w, r, slug)
-	case http.MethodOptions:
-		w.WriteHeader(http.StatusOK)
-	default:
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -141,44 +98,6 @@ func handleFeed(w http.ResponseWriter, r *http.Request) {
 	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
-}
-
-func getCount(w http.ResponseWriter, slug string) {
-	var baseCount int
-	err := db.QueryRow("SELECT count FROM views WHERE slug = ?", slug).Scan(&baseCount)
-	if err != nil && err != sql.ErrNoRows {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	var uniqueCount int
-	err = db.QueryRow("SELECT COUNT(*) FROM blog_post_views WHERE slug = ?", slug).Scan(&uniqueCount)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	respondJSON(w, ViewCount{Slug: slug, Count: baseCount + uniqueCount})
-}
-
-func incrementCount(w http.ResponseWriter, r *http.Request, slug string) {
-	token := strings.TrimSpace(r.Header.Get("X-Viewer-Token"))
-	if token == "" {
-		http.Error(w, "Missing viewer token", http.StatusBadRequest)
-		return
-	}
-
-	_, err := db.Exec(`
-		INSERT OR IGNORE INTO blog_post_views (slug, viewer_token, created_at)
-		VALUES (?, ?, ?)
-	`, slug, token, time.Now().UTC().Unix())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	// Get the new count to return it
-	getCount(w, slug)
 }
 
 func listFeed(w http.ResponseWriter, r *http.Request) {
@@ -341,12 +260,11 @@ func incrementFeedViews(w http.ResponseWriter, r *http.Request, postID int) {
 
 func respondJSON(w http.ResponseWriter, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
+	_ = json.NewEncoder(w).Encode(data)
 }
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// In production, you might want to restrict this to your domain
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Viewer-Token")
@@ -394,47 +312,8 @@ func ensureFeedTable() error {
 		"created_at" INTEGER NOT NULL
 	);`
 
-	if _, err := db.Exec(createSQL); err != nil {
-		return err
-	}
-
-	hasTitle, err := feedHasTitleColumn()
-	if err != nil {
-		return err
-	}
-	if !hasTitle {
-		return nil
-	}
-
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-	defer tx.Rollback()
-
-	_, err = tx.Exec(`CREATE TABLE IF NOT EXISTS feed_posts_new (
-		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-		"content" TEXT NOT NULL,
-		"created_at" INTEGER NOT NULL
-	);`)
-	if err != nil {
-		return err
-	}
-
-	_, err = tx.Exec(`INSERT INTO feed_posts_new (id, content, created_at)
-		SELECT id, content, created_at FROM feed_posts;`)
-	if err != nil {
-		return err
-	}
-
-	if _, err = tx.Exec(`DROP TABLE feed_posts;`); err != nil {
-		return err
-	}
-	if _, err = tx.Exec(`ALTER TABLE feed_posts_new RENAME TO feed_posts;`); err != nil {
-		return err
-	}
-
-	return tx.Commit()
+	_, err := db.Exec(createSQL)
+	return err
 }
 
 func ensureFeedViewsTable() error {
@@ -450,43 +329,16 @@ func ensureFeedViewsTable() error {
 	return err
 }
 
-func ensureBlogViewsTable() error {
-	createSQL := `CREATE TABLE IF NOT EXISTS blog_post_views (
-		"id" INTEGER PRIMARY KEY AUTOINCREMENT,
-		"slug" TEXT NOT NULL,
-		"viewer_token" TEXT NOT NULL,
-		"created_at" INTEGER NOT NULL,
-		UNIQUE(slug, viewer_token)
-	);`
-
-	_, err := db.Exec(createSQL)
-	return err
+func cleanupBlogTables() error {
+	if _, err := db.Exec(`DROP TABLE IF EXISTS views;`); err != nil {
+		return err
+	}
+	if _, err := db.Exec(`DROP TABLE IF EXISTS blog_post_views;`); err != nil {
+		return err
+	}
+	return nil
 }
 
-func feedHasTitleColumn() (bool, error) {
-	rows, err := db.Query(`PRAGMA table_info(feed_posts);`)
-	if err != nil {
-		return false, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var cid int
-		var name string
-		var ctype string
-		var notnull int
-		var dfltValue sql.NullString
-		var pk int
-		if err := rows.Scan(&cid, &name, &ctype, &notnull, &dfltValue, &pk); err != nil {
-			return false, err
-		}
-		if name == "title" {
-			return true, nil
-		}
-	}
-
-	return false, rows.Err()
-}
 func loadEnvFile(path string) {
 	data, err := os.ReadFile(path)
 	if err != nil {
