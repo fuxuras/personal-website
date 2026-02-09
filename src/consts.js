@@ -11,11 +11,6 @@ export const NAV_LINKS = [
         text: "Projects",
         href: "/projects",
     },
-    {
-        text: "Duvar",
-        href: "/feed",
-        audience: "personal",
-    },
 ];
 
 export const SOCIAL_LINKS = [

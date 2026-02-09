@@ -39,13 +39,6 @@ import "../styles/global.css";
         </script>
         <script is:inline>
             if (typeof localStorage !== 'undefined') {
-                const audienceKey = 'audience_mode';
-                const storedAudience = localStorage.getItem(audienceKey) || 'professional';
-                document.documentElement.dataset.audience = storedAudience;
-            }
-        </script>
-        <script is:inline>
-            if (typeof localStorage !== 'undefined') {
                 const tokenKey = 'viewer_token';
                 if (!localStorage.getItem(tokenKey)) {
                     const uuid = typeof crypto !== 'undefined' && crypto.randomUUID
@@ -100,29 +93,6 @@ import "../styles/global.css";
                     setTheme(next);
                 });
 
-                const audienceKey = 'audience_mode';
-                const switchButton = document.querySelector('[data-audience-switch]');
-
-                const setAudience = (value) => {
-                    document.documentElement.dataset.audience = value;
-                    if (switchButton) {
-                        const isPersonal = value === 'personal';
-                        switchButton.classList.toggle('is-on', isPersonal);
-                        switchButton.setAttribute('aria-pressed', isPersonal ? 'true' : 'false');
-                    }
-                };
-
-                const storedAudience = storage?.getItem(audienceKey)
-                    || document.documentElement.dataset.audience
-                    || 'professional';
-                setAudience(storedAudience);
-
-                switchButton?.addEventListener('click', () => {
-                    const current = document.documentElement.dataset.audience || 'professional';
-                    const next = current === 'professional' ? 'personal' : 'professional';
-                    storage?.setItem(audienceKey, next);
-                    setAudience(next);
-                });
             };
 
             if (document.readyState === 'loading') {

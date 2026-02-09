@@ -22,7 +22,6 @@ const projectCollection = defineCollection({
     tags: z.array(z.string()),
     repoUrl: z.string().optional(),
     liveUrl: z.string().optional(),
-    audience: z.enum(['personal', 'professional']).optional(),
   }),
 });
 

@@ -4,10 +4,7 @@ import { Icon } from "astro-icon/components";
 const { project } = Astro.props;
 ---
 
-<div
-    class="h-full flex flex-col tile p-5"
-    {...(project.data.audience ? { 'data-audience': project.data.audience } : {})}
->
+<div class="h-full flex flex-col tile p-5">
     <h3 class="text-base font-semibold tracking-tight">{project.data.title}</h3>
     <p class="mt-2 text-sm text-muted-foreground flex-grow">{project.data.description}</p>
 
