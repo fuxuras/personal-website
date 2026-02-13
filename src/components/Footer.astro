@@ -1,6 +1,5 @@
 ---
 import Container from "./Container.astro";
-import { SOCIAL_LINKS } from "../consts.js";
 import { Icon } from "astro-icon/components";
 ---
 
@@ -9,12 +8,6 @@ import { Icon } from "astro-icon/components";
     <div class="flex flex-wrap justify-between items-center gap-4 px-6">
       <div class="caption">&copy; {new Date().getFullYear()} Fuxuras</div>
       <div class="flex flex-wrap items-center gap-2">
-          {SOCIAL_LINKS.map(link => (
-              <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.ariaLabel} class="cta-link">
-                  <Icon name={link.icon} class="w-4 h-4" />
-                  <span>{link.name}</span>
-              </a>
-          ))}
           <button
             data-theme-toggle
             type="button"
