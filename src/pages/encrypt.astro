@@ -1,0 +1,268 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/Container.astro";
+import Frame from "../components/Frame.astro";
+---
+
+<Layout title="Encrypt / Decrypt" lang="en">
+  <Container>
+    <section class="stack">
+      <Frame class="p-5 space-y-3">
+        <div class="caption">Tool</div>
+        <h1 class="text-2xl font-semibold tracking-tight">Text Encrypt / Decrypt</h1>
+        <p class="text-sm text-muted-foreground">
+          AES-GCM with password-based key derivation (PBKDF2). Data stays in your browser.
+        </p>
+      </Frame>
+
+      <Frame class="p-5 space-y-4">
+        <label class="block space-y-2">
+          <span class="caption">Input Text</span>
+          <textarea
+            id="inputText"
+            rows={8}
+            class="w-full border border-border bg-background px-3 py-2 text-sm"
+            placeholder="Paste plain text for Encrypt or encrypted payload for Decrypt"
+          ></textarea>
+        </label>
+
+        <label class="block space-y-2">
+          <span class="caption">Password</span>
+          <div class="relative">
+            <input
+              id="password"
+              type="password"
+              class="w-full border border-border bg-background px-3 py-2 pr-10 text-sm"
+              placeholder="very-strong-and-long-password-you-will-never-guess"
+            />
+            <button
+              id="togglePasswordBtn"
+              type="button"
+              class="absolute right-2 top-1/2 inline-flex -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Show password"
+              aria-pressed="false"
+              title="Show password"
+            >
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </div>
+        </label>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button
+            id="encryptBtn"
+            type="button"
+            class="inline-flex items-center gap-2 border border-border bg-foreground text-background px-4 py-2 text-xs uppercase tracking-[0.25em] font-mono"
+          >
+            Encrypt
+          </button>
+          <button
+            id="decryptBtn"
+            type="button"
+            class="inline-flex items-center gap-2 border border-border px-4 py-2 text-xs uppercase tracking-[0.25em] font-mono"
+          >
+            Decrypt
+          </button>
+          <button
+            id="clearBtn"
+            type="button"
+            class="inline-flex items-center gap-2 border border-border px-4 py-2 text-xs uppercase tracking-[0.25em] font-mono text-muted-foreground"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div id="statusMessage" aria-live="polite" class="text-xs text-muted-foreground font-mono uppercase tracking-[0.2em]">
+          Ready
+        </div>
+
+        <label class="block space-y-2">
+          <span class="caption">Result</span>
+          <textarea
+            id="outputText"
+            rows={8}
+            readonly
+            class="w-full border border-border bg-background px-3 py-2 text-sm"
+            placeholder="Output will appear here"
+          ></textarea>
+        </label>
+      </Frame>
+    </section>
+  </Container>
+
+  <script>
+    const inputText = document.getElementById("inputText");
+    const password = document.getElementById("password");
+    const outputText = document.getElementById("outputText");
+    const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+    const eyeIcon = document.getElementById("eyeIcon");
+    const encryptBtn = document.getElementById("encryptBtn");
+    const decryptBtn = document.getElementById("decryptBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const statusMessage = document.getElementById("statusMessage");
+
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const VERSION = "v1";
+    const PBKDF2_ITERATIONS = 120000;
+
+    const setStatus = (text, isError = false) => {
+      statusMessage.textContent = text;
+      statusMessage.classList.toggle("text-destructive", isError);
+      if (isError) {
+        statusMessage.classList.remove("text-muted-foreground");
+      } else {
+        statusMessage.classList.add("text-muted-foreground");
+      }
+    };
+
+    const toBase64 = (bytes) => {
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 1) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    };
+
+    const fromBase64 = (value) => {
+      const binary = atob(value);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i += 1) {
+        bytes[i] = binary.charCodeAt(i);
+      }
+      return bytes;
+    };
+
+    const deriveAesKey = async (passwordText, salt) => {
+      const passwordMaterial = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(passwordText),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+      );
+
+      return crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt,
+          iterations: PBKDF2_ITERATIONS,
+          hash: "SHA-256"
+        },
+        passwordMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["encrypt", "decrypt"]
+      );
+    };
+
+    const encryptText = async (plainText, passwordText) => {
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      const iv = crypto.getRandomValues(new Uint8Array(12));
+      const key = await deriveAesKey(passwordText, salt);
+
+      const cipherBuffer = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        key,
+        encoder.encode(plainText)
+      );
+
+      const cipherBytes = new Uint8Array(cipherBuffer);
+      return `${VERSION}:${toBase64(salt)}:${toBase64(iv)}:${toBase64(cipherBytes)}`;
+    };
+
+    const decryptText = async (payload, passwordText) => {
+      const parts = payload.split(":");
+      if (parts.length !== 4 || parts[0] !== VERSION) {
+        throw new Error("Invalid payload format");
+      }
+
+      const salt = fromBase64(parts[1]);
+      const iv = fromBase64(parts[2]);
+      const cipherBytes = fromBase64(parts[3]);
+      const key = await deriveAesKey(passwordText, salt);
+
+      const plainBuffer = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv },
+        key,
+        cipherBytes
+      );
+
+      return decoder.decode(plainBuffer);
+    };
+
+    const validateInputs = () => {
+      if (!inputText.value.trim()) {
+        setStatus("Input text is required", true);
+        return false;
+      }
+      if (!password.value) {
+        setStatus("Password is required", true);
+        return false;
+      }
+      return true;
+    };
+
+    encryptBtn?.addEventListener("click", async () => {
+      if (!validateInputs()) return;
+      setStatus("Encrypting...");
+      try {
+        const encrypted = await encryptText(inputText.value, password.value);
+        outputText.value = encrypted;
+        setStatus("Encryption complete");
+      } catch (error) {
+        setStatus("Encryption failed", true);
+      }
+    });
+
+    decryptBtn?.addEventListener("click", async () => {
+      if (!validateInputs()) return;
+      setStatus("Decrypting...");
+      try {
+        const decrypted = await decryptText(inputText.value, password.value);
+        outputText.value = decrypted;
+        setStatus("Decryption complete");
+      } catch (error) {
+        setStatus("Decryption failed. Check password or payload", true);
+      }
+    });
+
+    clearBtn?.addEventListener("click", () => {
+      inputText.value = "";
+      outputText.value = "";
+      password.value = "";
+      password.type = "password";
+      togglePasswordBtn?.setAttribute("aria-label", "Show password");
+      togglePasswordBtn?.setAttribute("aria-pressed", "false");
+      togglePasswordBtn?.setAttribute("title", "Show password");
+      if (eyeIcon) {
+        eyeIcon.innerHTML = `
+          <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+          <circle cx="12" cy="12" r="3" />
+        `;
+      }
+      setStatus("Cleared");
+    });
+
+    togglePasswordBtn?.addEventListener("click", () => {
+      const isHidden = password.type === "password";
+      password.type = isHidden ? "text" : "password";
+      togglePasswordBtn.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+      togglePasswordBtn.setAttribute("aria-pressed", isHidden ? "true" : "false");
+      togglePasswordBtn.setAttribute("title", isHidden ? "Hide password" : "Show password");
+
+      if (eyeIcon) {
+        eyeIcon.innerHTML = isHidden
+          ? `<path d="m3 3 18 18" />
+             <path d="M10.58 10.58a2 2 0 1 0 2.83 2.83" />
+             <path d="M9.88 5.09A10.75 10.75 0 0 1 21.94 12a10.75 10.75 0 0 1-4.26 5.09" />
+             <path d="M6.61 6.61A10.75 10.75 0 0 0 2.06 12 10.75 10.75 0 0 0 12 18.75a10.7 10.7 0 0 0 5.39-1.44" />`
+          : `<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+             <circle cx="12" cy="12" r="3" />`;
+      }
+    });
+  </script>
+</Layout>

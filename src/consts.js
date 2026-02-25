@@ -1,4 +1,13 @@
-export const NAV_LINKS = [];
+export const NAV_LINKS = [
+    {
+        text: "Duvar",
+        href: "/"
+    },
+    {
+        text: "Encrypt",
+        href: "/encrypt"
+    }
+];
 
 export const SOCIAL_LINKS = [
     {
