@@ -16,20 +16,26 @@ export const NAV_LINKS = [
 export const SOCIAL_LINKS = [
     {
         name: "X",
-        href: "https://x.com/fuxuras",
+        href: "https://x.com/okaldev",
         icon: "simple-icons:x",
-        ariaLabel: "Fuxuras on X"
+        ariaLabel: "Furkancan Okal on X"
     },
     {
         name: "GitHub",
-        href: "https://github.com/fuxuras",
+        href: "https://github.com/okaldev",
         icon: "simple-icons:github",
-        ariaLabel: "Fuxuras on GitHub"
+        ariaLabel: "Furkancan Okal on GitHub"
     },
     {
         name: "LinkedIn",
         href: "https://www.linkedin.com/in/furkancan-okal",
         icon: "simple-icons:linkedin",
-        ariaLabel: "Fuxuras on LinkedIn"
+        ariaLabel: "Furkancan Okal on LinkedIn"
+    },
+    {
+        name: "Email",
+        href: "mailto:furkancan@okal.dev",
+        icon: "heroicons:envelope",
+        ariaLabel: "Email Furkancan Okal"
     },
 ];
